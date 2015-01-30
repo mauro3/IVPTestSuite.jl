@@ -12,7 +12,7 @@ These tests can be run with the scrips
 A few observations:
 
 - DASSL.jl seems to be as capable as the Sundials solvers if sometimes
-  slower but also sometimes faster.
+  slower (but also sometimes faster).
 - For large(-ish) systems, e.g. stemming from PDEs, DASSL.jl seems to
   be the best and fastest choice at the moment because of the patchy support of
   sparse Jacobians in Sundials. (please correct me if wrong).
@@ -34,9 +34,6 @@ the timings might be off.
 ![hires](img/scd-vs-walltime-hires.png)
 
 ![rober](img/scd-vs-walltime-rober.png)
-
-- The Sundials solvers did not manage to cope with this problem at
-  all, thus no results are shown.  Still need to investigate this further.
 
 ![bruss1d](img/scd-vs-walltime-bruss1d.png)
 

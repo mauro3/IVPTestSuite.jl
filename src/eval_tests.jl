@@ -22,9 +22,9 @@ end
 calc_error_scd(sol, tr::TestRun) = calc_error_scd(sol[tr.tc.refsolinds],
                                                  tr.tc.refsol,
                                                  tr.tc.scd_absinds)
-calc_error_scd(tr::TestResults) = calc_error_scd(tr.solution[tr.testrun.tc.refsolinds],
-                                                 tr.testrun.tc.refsol,
-                                                 tr.testrun.tc.scd_absinds)
+calc_error_scd(res::TestResults) = calc_error_scd(res.yend[res.testrun.tc.refsolinds],
+                                                 res.testrun.tc.refsol,
+                                                 res.testrun.tc.scd_absinds)
 
 @doc """Calculates the mescd error estimate from Mazzia & Magherini p.II-ii. 
         Mixed significant digit of the approximate solution.  (Very similar to 
@@ -36,9 +36,9 @@ end
 calc_error_mescd(sol, tr::TestRun) = calc_error_mescd(sol[tr.tc.refsolinds],
                                                       tr.tc.refsol,
                                                       tr.abstol, tr.reltol)
-calc_error_mescd(tr::TestResults) = calc_error_mescd(tr.solution[tr.testrun.tc.refsolinds],
-                                                     tr.testrun.tc.refsol,
-                                                     tr.testrun.abstol, tr.testrun.reltol)
+calc_error_mescd(res::TestResults) = calc_error_mescd(res.yend[res.testrun.tc.refsolinds],
+                                                     res.testrun.tc.refsol,
+                                                     res.testrun.abstol, res.testrun.reltol)
 
 function simple_eval{N,T}(tend::T, yend::Vector{T}, stats, walltime, mem, gc_time, tr::TestRun{N,T})
     tc = tr.tc

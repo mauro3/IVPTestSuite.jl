@@ -12,7 +12,7 @@ end
 ## Adaptive steppers
 
 # significant digits (scd) vs walltime
-for (n,tc) in IVPTestSuite.tc_all
+for (n,tc) in totest
     leg = String[]
     id = W.figure()
     #W.hold(true)
@@ -112,7 +112,7 @@ end
 
 ## Fixed step solvers
 # significant digits (scd) vs walltime
-for (n,tc) in OdeTestSuite.tc_all
+for (n,tc) in totest
     leg = String[]
     id = W.figure()
     #W.hold(true)
