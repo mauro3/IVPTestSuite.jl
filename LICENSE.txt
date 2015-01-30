@@ -1,0 +1,16 @@
+The IVPTestSuite.jl package is licensed under the GNU GENERAL PUBLIC
+LICENSE Version 2
+
+Copyright (C) 2015, Mauro Werder mauro_lc at runbox.com
+
+Part of the code was derived from:
+
+* OdePkg - A package for solving ordinary differential equations and
+  more.  http://octave.sourceforge.net/odepkg/overview.html
+
+  Which is also GNU General Public License by:
+  Copyright (C) 2006-2012, Thomas Treichl <treichl@users.sourceforge.net>
+
+* Hairer and Wanner test set http://www.unige.ch/~hairer/testset/testset.html
+  Copyright (C) 2004 Ernst Hairer which is under a BSD-style licence:
+  http://www.unige.ch/~hairer/prog/licence.txt
