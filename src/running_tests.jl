@@ -8,6 +8,7 @@ function run_ode_test{Name}(tr::TestRun{Name}; verbose=true)
     end
 
     out, walltime, mem, gc_time = (1,2,3,4) # try makes a new scope?!
+    gc()
     try
         out, walltime, mem, gc_time = @timed tr.solver.wrapper(tr)
     catch e
@@ -25,6 +26,7 @@ function run_ode_test_throwerror{Name}(tr::TestRun{Name})
         println("\nTest case $Name not compatible with solver $(tr.solver.solverfn)")
         return nothing
     end
+    gc()
     out, walltime, mem, gc_time = @timed tr.solver.wrapper(tr)
     tend, yend, stats = out
     return simple_eval(tend, yend, stats, walltime, mem, gc_time, tr)
@@ -60,7 +62,7 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
             if mem<1e6
                 println(" sig. digits= $sd, walltime= $(wt)s, memory= $(mem)bytes")
             else
-                mem = round(Int,mem/1e6)
+                mem = round(mem/1e6)
                 println(" sig. digits= $sd, walltime= $(wt)s, memory= $(mem)MB")
             end
         end
