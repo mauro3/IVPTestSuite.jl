@@ -17,10 +17,9 @@ function ODEjl_wrapper(tr::TestRun)
     if isadaptive(so)
         args = (fn, tc.ic, tc.tspan)
         # TODO: also use h0
+        kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol)) #, (:points, :specified))
         if hasjacobian(tc) && isimplicit(so)
-            kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol), (:jacobian, jac))
-        else
-            kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol))
+            kwargs  = ((:jacobian, jac), kwargs...)
         end
     else
         args = (fn, tc.ic, tr.tsteps)

@@ -26,12 +26,12 @@ threebody = let
     function fn!(t,y,dydt)
         # the ode function
         
-        y1, y2, y1′, y2′ = y[:]
+        y1, y2, y1′, y2′ = y[:] # this allocates memory... but less than below
         D1 = ((y1+μ )^2 + y2^2)^(3/2)
         D2 = ((y1-μ′)^2 + y2^2)^(3/2)
         y1″ = y1 + 2*y2′ - μ′*(y1+μ)/D1 - μ*(y1-μ′)/D2
         y2″ = y2 - 2*y1′ - μ′*y2/D1     - μ*y2/D2
-        dydt[:] = [y1′, y2′, y1″, y2″]
+        dydt[:] = [y1′, y2′, y1″, y2″] # this allocates memory...
         return nothing
     end
     fn!( ; T_::Type=T, dof_=dof) = zeros(T_,dof_)
