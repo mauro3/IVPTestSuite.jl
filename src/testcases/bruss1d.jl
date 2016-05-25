@@ -21,10 +21,10 @@ export bruss1d
 bruss1d = let
     tcname = :bruss1d # name should be same as variable name (except for upper/lower case)
     
-    T = Float64 # the datatype used, probably Float64
+    const T = Float64 # the datatype used, probably Float64
     Tarr = SparseMatrixCSC
-    N = 500 # active gridpoints
-    dof = 2N # degrees of freedom (boundary points are not free)
+    const N = 500 # active gridpoints
+    const dof = 2N # degrees of freedom (boundary points are not free)
     dx = 1/(N+1)
     x = dx:dx:1-dx
     dae = 0  # index of DAE, ==0 for ODE
@@ -33,7 +33,7 @@ bruss1d = let
     
     # parameters
     alpha = 1/50
-    gamma = alpha/dx^2
+    const gamma = alpha/dx^2
     
     # BC
     ubc1(t) = 1
@@ -41,7 +41,7 @@ bruss1d = let
     vbc1(t) = 3
     vbc2(t) = 3
     #IC
-    u0(x) = 1 + 0.5*sin(2π*x)
+    u0(x) = 1 + sin(2π*x)/2
     v0(x) = 3 * ones(length(x))
 
     inds(i) = (2i-1, 2i)

@@ -293,6 +293,9 @@ myodesolver = Solver{typ}(solverfn, solverpkg, wrapped_solver, stiffness, adapti
 push!(allsolvers, myodesolver)
 ```
 
+# TODO
+- check implementation of test-case functions wrt globals
+
 # Licence
 
 IVPTestSuite is under a GNU GENERAL PUBLIC LICENSE Version 2 as parts

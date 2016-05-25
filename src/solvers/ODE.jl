@@ -17,7 +17,7 @@ function ODEjl_wrapper(tr::TestRun)
     if isadaptive(so)
         args = (fn, tc.ic, tc.tspan)
         # TODO: also use h0
-        kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol)) #, (:points, :specified))
+        kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol), (:points, :specified))
         if hasjacobian(tc) && isimplicit(so)
             kwargs  = ((:jacobian, jac), kwargs...)
         end
@@ -57,16 +57,14 @@ begin
     ODEsolvers = Any[]
     sl = 1 # to make it global so it works with eval
     # adaptive non-stiff solvers
-    for fn in [:(ODE.ode23),
-              :(ODE.ode23_bs),
+    for fn in [:(ODE.ode21),
+              :(ODE.ode23),
               :(ODE.ode45_dp),
-              :(ODE.ode45_fb),
-              :(ODE.ode45_ck),
-              :(ODE.ode78_fb),
-       #       :(ODE.ode45)
+              :(ODE.ode45_fe),
+              :(ODE.ode78),
               ]
         n = fn.args[2].value
-        if fn==:(ODE.ode45_dp)
+        if fn==:(ODE.ode54)
             stiffness = mildlystiff
         else
             stiffness = nonstiff
