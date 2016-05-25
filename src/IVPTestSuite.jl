@@ -67,13 +67,13 @@ immutable TestCaseExplicit{Name, T, Tarr} <: TestCase{Name,T,Tarr}  # for explic
     dae::Int              # index of DAE, ==0 for ODE
     dof::Int              # degrees of freedom
     fn!::Function          # objective function
-    jac!::Union(Function,Nothing)  # Jacobian of fn, can also initialize an array for the Jacobian
-    mass!::Union(Function,Nothing) # mass matrix, can also initialize an array for the mass matrix
+    jac!::Union{Function,Void}  # Jacobian of fn, can also initialize an array for the Jacobian
+    mass!::Union{Function,Void} # mass matrix, can also initialize an array for the mass matrix
     ic::Vector{T}         # Initial condition
-    tspan::Vector{T}      # [t_start, t_end] 
+    tspan::Vector{T}      # [t_start, t_end]
     refsol::Vector{T}     # reference solution at t=t_end
-    refsolinds::Union(BitVector,Vector{Int})  # which indices of the solution should compared to refsol
-    scd_absinds::Union(BitVector,Vector{Int})   # components for which to use the absolute
+    refsolinds::Union{BitVector,Vector{Int}}  # which indices of the solution should compared to refsol
+    scd_absinds::Union{BitVector,Vector{Int}}   # components for which to use the absolute
                                                 # error instead of relative, c.f. calc_error_scd
 end
 # TODO make:
@@ -94,7 +94,7 @@ end
 immutable Solver{Typ}    # Typ: :ex (explicit method), :im (implicit method), :imex (IMEX method)
     solverfn::Function   # the actual solver
     package::Module      # the package-module where it is defined
-    wrapper::Function    # a function (tr::TestRun) -> 
+    wrapper::Function    # a function (tr::TestRun) ->
     # capabilities:
     stiff::Stiff         # stiff, mildly stiff or non-stiff solver
     adaptive::Bool
@@ -179,7 +179,7 @@ immutable TestSuite{Name, T<:Real}
         len = length(tstepss)
         new(tc, solver, solverpara, T[], T[], T[], tstepss, len, false)
     end
-    
+
 end
 TestSuite{Name,T}(tc::TestCase{Name,T}, solver, abstols, reltols, h0s; solverpara=Dict{Symbol,Any}() ) = TestSuite{Name,T}(tc, solver, abstols, reltols, h0s; solverpara=solverpara )
 TestSuite{Name,T}(tc::TestCase{Name,T}, solver, tstepss; solverpara=Dict{Symbol,Any}() ) = TestSuite{Name,T}(tc, solver, tstepss; solverpara=solverpara )
@@ -219,7 +219,7 @@ immutable TestResults{Name,T<:Real}
     gc_time::Float64 # time used by garbage collode23sector
     scd::Float64  # Error estimate: significant digits, see Mazzia & Magherini p.II-ii
     mescd::Float64  # a variation on scd, see Mazzia & Magherini p.II-ii
-    error::Union(Nothing, Exception) # holds the exception if one occured
+    error::Union{Void, Exception} # holds the exception if one occured
 end
 function Base.show( io::IO, res::TestResults)
     tr = res.testrun
@@ -233,7 +233,7 @@ function Base.show( io::IO, res::TestResults)
           """
           Results of TestCase \"$(name(tc))\" solved with $(so.solverfn),
           $trdetails
-          
+
           Significant digits: $(scd)
           Walltime:           $wt s
           Memory allocated:   $mb MB
@@ -243,7 +243,7 @@ end
 
 
 # misc helper functions
-name{Name}(t::Union(TestRun{Name}, TestResults{Name}, TestCase{Name})) = Name
+name{Name}(t::Union{TestRun{Name}, TestResults{Name}, TestCase{Name}}) = Name
 
 ## misc helper funs
 include("helpers.jl")
