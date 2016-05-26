@@ -20,7 +20,7 @@ export bruss1d
 
 bruss1d = let
     tcname = :bruss1d # name should be same as variable name (except for upper/lower case)
-    
+
     const T = Float64 # the datatype used, probably Float64
     Tarr = SparseMatrixCSC
     const N = 500 # active gridpoints
@@ -30,14 +30,14 @@ bruss1d = let
     dae = 0  # index of DAE, ==0 for ODE
     # stiffness of system, one of the three constants
     stiffness = [nonstiff, mildlystiff, stiff][3]
-    
+
     # parameters
     alpha = 1/50
     const gamma = alpha/dx^2
-    
+
     # BC
     ubc1(t) = 1
-    ubc2(t) = 1    
+    ubc2(t) = 1
     vbc1(t) = 3
     vbc2(t) = 3
     #IC
@@ -76,7 +76,7 @@ bruss1d = let
         return nothing
     end
     fn!(;T_::Type=T, dof_=dof) = zeros(T_,dof_)
-    
+
     # Jacobian is a banded matrix with upper and lower bandwidth 2,
     # c.f. W&H p.148, but Julia does not support banded matrices yet.
     # Thus use a sparse matrix.
@@ -110,7 +110,7 @@ bruss1d = let
                 dfdy.nzval[ii] = gamma
                 ii +=1
             end
-            
+
             # iv: column belonging to d/dv(i)
             if iv-2>=1
                 # dv'(i-1)/dv(i)
@@ -137,12 +137,12 @@ bruss1d = let
         return nothing
     end
     function jac!(;T_::Type=T, dof_=dof)
-        B = (ones(T_,dof_-2), ones(T_,dof_-1), ones(T_,dof_), ones(T_,dof_-1), ones(T_,dof_-2))        
+        B = (ones(T_,dof_-2), ones(T_,dof_-1), ones(T_,dof_), ones(T_,dof_-1), ones(T_,dof_-2))
         spdiagm(B, (-2,-1,0,1,2))
     end
 #    jac! = nothing
 
-    
+
     mass! = nothing
 
     # vector of initial conditions
@@ -150,7 +150,7 @@ bruss1d = let
     ic[1:2:2N] = u0(x)
     ic[2:2:2N] = v0(x)
     tspan = T[0.0, 10.0] # integration interval
-    
+
     refsol = T[0.9949197002317599, 3.0213845767604077, 0.9594350193986054, 3.0585989778165419, 0.9243010095428502, 3.0952478919989637, 0.8897959106772672,
                3.1310118289054731, 0.8561653620284367, 3.1656101198770159, 0.8236197147449046, 3.1988043370624344, 0.7923328094811884, 3.2303999530641514,
                0.7624421042573115, 3.2602463873623941, 0.7340499750795348, 3.2882356529108807, 0.7072259700779899, 3.3142998590079271, 0.6820097782458483,
@@ -172,13 +172,13 @@ bruss1d = let
                0.7271392249346637, 3.2805361342349380, 0.7550589020044152, 3.2505478606008622, 0.7844787296769868, 3.2187201496972175, 0.8153046416214843,
                3.1851941538893653, 0.8474089465959840, 3.1501538739882800, 0.8806289904192589, 3.1138264039027113, 0.9147669230929857, 3.0764806689389470,
                0.9495907429372025, 3.0384245041548366, 0.9848367306701233] # reference sol from Hairer has 1.36 scd
-    refsolinds = [1:7:dof] # refsol is only at components 1:7:2N
-    
+    refsolinds = collect(1:7:dof) # refsol is only at components 1:7:2N
+
     scd_absinds = Int[] # set to true where refsol is
                                          # very small or zero. To
                                          # avoid it dominating the
                                          # relative error
-    
+
     tc = TestCaseExplicit{tcname, T, Tarr}(
                              stiffness,
                              dae,
@@ -191,7 +191,7 @@ bruss1d = let
                              refsol,
                              refsolinds,
                              scd_absinds)
-                             
+
     # put into the right buckets
     tc_all[tcname] = tc
     tc_stiff[tcname] = tc
@@ -199,5 +199,3 @@ bruss1d = let
     # block needs to be tc!
     tc
 end
-                             
-                             

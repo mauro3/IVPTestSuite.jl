@@ -1,6 +1,8 @@
 module IVPTestSuite
 # Differential equation initial value problem test suite
 
+import Base: +, -, *, /, .+, .-, .*, ./,==,>,>=
+
 # to dispose of the @doc macro:
 if VERSION<v"0.4"
     macro doc(a...)

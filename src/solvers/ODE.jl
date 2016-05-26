@@ -29,11 +29,11 @@ function ODEjl_wrapper(tr::TestRun)
             kwargs  = ()
         end
     end
-    
+
     ###
     # 2) Call solver, if it does not succeed throw an error (if that
     # is not done anyway)
-    (t,y) = so.solverfn(args...; kwargs...)  
+    (t,y) = so.solverfn(args...; kwargs...)
 
     ###
     # 3) Transform output to conform to standard:
@@ -75,18 +75,19 @@ begin
     end
     # fixed step non-stiff solvers
     for fn in [:(ODE.ode4),
-              :(ODE.ode4ms)]
+              :(ODE.ode4ms),
+              :(ODE.ode_imp_ab)]
         n = fn.args[2].value
         sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
         eval(:($n = sl))
         push!(ODEsolvers, sl)
     end
-    
+
     # adaptive stiff solvers
     for fn in [:(ODE.ode23s)]
         n = fn.args[2].value
         fn_str = string(n)
-        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq) 
+        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
         eval(:($n = sl))
         push!(ODEsolvers, sl)
     end
@@ -103,4 +104,3 @@ begin
     end
     append!(allsolvers, ODEsolvers)
 end
-
