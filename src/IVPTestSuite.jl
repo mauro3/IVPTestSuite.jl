@@ -14,7 +14,7 @@ if VERSION<v"0.4"
     end
 end
 
-#using Requires
+using Requires
 
 # modules
 export Solvers
