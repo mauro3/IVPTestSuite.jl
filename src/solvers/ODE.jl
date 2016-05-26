@@ -76,7 +76,8 @@ begin
     # fixed step non-stiff solvers
     for fn in [:(ODE.ode4),
               :(ODE.ode4ms),
-              :(ODE.ode_imp_ab)]
+#              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
+              ]
         n = fn.args[2].value
         sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
         eval(:($n = sl))
