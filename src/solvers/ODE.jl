@@ -49,15 +49,9 @@ end
 
 import ODE
 
-<<<<<<< 4d57a1d86ce8893f0de8138a58db6fe3be1e1280
-
 ##############################################################################
 #List of all ODE.jl solvers avaible for testing
 ##############################################################################
-
-=======
-##List of solvers available in official JuliaLang/ODE.jl
->>>>>>> Local arrays of ODE solvers in IVPTestSuite src/solvers/ODE.jl
 ## Non-stiff fixed step solvers
 nonstiff_fixedstep= [
            ODE.ode1,
@@ -68,44 +62,31 @@ nonstiff_fixedstep= [
            ODE.ode5ms
 #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
            ]
-<<<<<<< 4d57a1d86ce8893f0de8138a58db6fe3be1e1280
 ## Non-stiff adaptive step solvers
-=======
-
-## Non-stiff fixed step solvers
->>>>>>> Local arrays of ODE solvers in IVPTestSuite src/solvers/ODE.jl
 nonstiff_adaptive=[
 #          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
            ODE.ode23,
            ODE.ode45,
            ODE.ode45_dp,
            ODE.ode45_fe,
-<<<<<<< 4d57a1d86ce8893f0de8138a58db6fe3be1e1280
            ODE.ode78,
 #          ODE.ode_ab_adaptive #Adaptive Adam Bashforth under construction
            ]
-## Stiff fixed-step solvers
-=======
-           ODE.ode78
-           ]
+
 # Stiff fixed-step solvers
->>>>>>> Local arrays of ODE solvers in IVPTestSuite src/solvers/ODE.jl
 stiff_fixedstep=[
            ODE.ode4s_s,
            ODE.ode4s_kr
            ]
-<<<<<<< 4d57a1d86ce8893f0de8138a58db6fe3be1e1280
 ## Stiff adaptive solvers
 stiff_adaptive = [
            ODE.ode23s
  #          ODE.odeRadauIIA #RADAU methods under construction
            ]
 
-
 ode_only = 0 # dae index
 pkg = "ODE.jl"
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
-<<<<<<< 7d2b20844c6ccfd42f39a7e0dccbb0081e2f22f6
 
 ODEsolvers = Dict{Any,Solver}()
 sl = 1 # to make it global so it works with eval
