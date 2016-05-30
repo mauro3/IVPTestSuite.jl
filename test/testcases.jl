@@ -15,13 +15,12 @@ rtols = atols
 typealias TestDict Dict{Symbol, Dict{Solver, Float64}}
 tests = TestDict()
 # need at least one entry for each IVPTestSuite.tc_all
-tests[:hires]     = Dict(S.allsolvers[ODE.ode23s] => 3.3206089)
-tests[:vdpol]     = Dict(S.allsolvers[ODE.ode23s] =>  4.610889958728395)
-tests[:threebody] = Dict(S.allsolvers[ODE.ode45_dp]  => 2.3352306868067383) # there was a regression at some point, used to be:  2.6330632171040236)
-tests[:rober]     = Dict(S.allsolvers[ODE.ode23s] => 0.8920654209711261) # there was a regression at some point, used to be: 1.4917671146318976)
-tests[:bruss1d]   = Dict(S.allsolvers[ODE.ode23s] => 4.068350511153728)
-tests[:chemakzo]  = Dict(S.allsolvers[DASSL.dasslSolve]  => 4.352199985825764)
-
+tests[:hires]     = Dict(S.ode23s => 3.3206089)
+tests[:vdpol]     = Dict(S.ode23s =>  4.610889958728395)
+tests[:threebody] = Dict(S.ode45_dp  => 2.3352306868067383) # there was a regression at some point, used to be:  2.6330632171040236)
+tests[:rober]     = Dict(S.ode23s => 0.8920654209711261) # there was a regression at some point, used to be: 1.4917671146318976)
+tests[:bruss1d]   = Dict(S.ode23s => 4.068350511153728)
+tests[:chemakzo]  = Dict(S.dassl  => 4.352199985825764)
 #@test length(tests)==length(IVPTestSuite.tc_all)
 
 for (name,tc) in IVPTestSuite.tc_all
