@@ -89,6 +89,7 @@ stiff_adaptive = [
 ode_only = 0 # dae index
 pkg = "ODE.jl"
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
+<<<<<<< 7d2b20844c6ccfd42f39a7e0dccbb0081e2f22f6
 
 ODEsolvers = Dict{Any,Solver}()
 sl = 1 # to make it global so it works with eval
