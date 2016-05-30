@@ -46,6 +46,7 @@ plei = let
           for j =1:N
             if i != j
               r = ((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2)
+
               #Note, for what follows, dydt[2N+i] = x″[i] and dydt[3N+i] = y″[i]
               dydt[2N+i] += j*(y[j] - y[i])/r  #j factor is mass of particles,
               dydt[3N+i] += j*(y[j+N] - y[i+N])/r

@@ -22,6 +22,7 @@ solver = S.allsolvers[[ODE.ode78,
 # make a TestRun which combines a TestCase with a Solver + some extras:
 ##Example protocol For adaptive solvers
 abstol = 1e-12
+
 reltol = abstol
 dt0 = NaN # size of first step
 tr = TestRunAdapt(tc, solver, Dict{Symbol,Any}(), abstol, reltol, dt0)
