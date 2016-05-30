@@ -95,7 +95,6 @@ for fn in nonstiff_adaptive
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
-# fixed step non-stiff solvers
 for fn in nonstiff_fixedstep
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
