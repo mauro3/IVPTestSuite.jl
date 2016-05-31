@@ -8,7 +8,7 @@ tc_dae = TCDict()
 tc_dae1 = TCDict() # index 1
 tc_dae2 = TCDict() # index 2
 tc_pde = TCDict() # stemming from discretized PDEs
-tc_ide = TCDict() # implicit differential equations 
+tc_ide = TCDict() # implicit differential equations
 
 # # problems with implicit equation
 # tc_impl_stiff = TCDict()
@@ -16,6 +16,7 @@ tc_ide = TCDict() # implicit differential equations
 
 # # non-stiff ODEs
 include("threebody.jl")
+include("plei.jl")
 
 # # stiff odes
 include("hires.jl")
@@ -25,4 +26,3 @@ include("bruss1d.jl")
 
 # # DAEs index 1
 include("chemakzo.jl")
-
