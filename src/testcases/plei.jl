@@ -21,7 +21,9 @@ plei = let
     # stiffness of system, one of the three constants
     stiffness = [nonstiff, mildlystiff, stiff][1]
 
-
+    r = zeros(Float64,7,7)
+    x″= zeros(Float64,7,7)
+    y″= zeros(Float64,7,7)
     ## the problem function
     function fn!(t::T,y::Vector{T},dydt::Vector{T})
         # The ode function dydt = f(t,y) modifying dydt in-place.
@@ -29,20 +31,21 @@ plei = let
 
         x1,x2,x3,x4,x5,x6,x7,y1,y2,y3,y4,y5,y6,y7,x1′,x2′,x3′,x4′,x5′,x6′,x7′,y1′,y2′,y3′,y4′,y5′,y6′,y7′ = y[:]
         #parameters
-        r = zeros(Float64,7,7)
-        x″= zeros(Float64,7,7)
-        y″= zeros(Float64,7,7)
-        println(r)
+        #println(r)
         for i = 1:N
           for j =1:N
-            setindex!(r,((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2),i,j)
+            if i != j
+              setindex!(r,((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2),i,j)
+            end
           end
         end
 
         for i = 1:N
           for j =1:N
-            x″[i] =+ j*(y[j] - y[i])/r[i,j]  #j factor is mass of particles
-            y″[i] =+ j*(y[j+N] - y[i+N])/r[i,j]
+            if i != j
+              x″[i] =+ j*(y[j] - y[i])/r[i,j]  #j factor is mass of particles
+              y″[i] =+ j*(y[j+N] - y[i+N])/r[i,j]
+            end
           end
         end
         dydt[:] = [x1′,x2′,x3′,x4′,x5′,x6′,x7′,y1′,y2′,y3′,y4′,y5′,y6′,y7′,

@@ -21,7 +21,7 @@ tests[:threebody] = Dict(S.ode45_dp  => 2.3352306868067383) # there was a regres
 tests[:rober]     = Dict(S.ode23s => 0.8920654209711261) # there was a regression at some point, used to be: 1.4917671146318976)
 tests[:bruss1d]   = Dict(S.ode23s => 4.068350511153728)
 tests[:chemakzo]  = Dict(S.dassl  => 4.352199985825764)
-tests[:plei]  = Dict(S.ode21  => 4.352199985825764)
+tests[:plei]  = Dict(S.ode45_dp  => -0.8287743683761837)
 
 #@test length(tests)==length(IVPTestSuite.tc_all)
 
