@@ -28,21 +28,25 @@ plei = let
         # Note that all indices of dydt need to be written!
 
         x1,x2,x3,x4,x5,x6,x7,y1,y2,y3,y4,y5,y6,y7,x1′,x2′,x3′,x4′,x5′,x6′,x7′,y1′,y2′,y3′,y4′,y5′,y6′,y7′ = y[:]
-
-        while i <= N
-          while j <= N
-            r[i][j]= ((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2)
+        #parameters
+        r = zeros(Float64,7,7)
+        x″= zeros(Float64,7,7)
+        y″= zeros(Float64,7,7)
+        println(r)
+        for i = 1:N
+          for j =1:N
+            setindex!(r,((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2),i,j)
           end
         end
 
-        while i <= N
-          while j <= N
-            xcoord″[i] =+ j*(y[j] - y[i])/r[i][j]  #j factor is mass of particles
-            ycoord″[i] =+ j*(y[j+N] - y[i+N])/r[i][j]
+        for i = 1:N
+          for j =1:N
+            x″[i] =+ j*(y[j] - y[i])/r[i,j]  #j factor is mass of particles
+            y″[i] =+ j*(y[j+N] - y[i+N])/r[i,j]
           end
         end
         dydt[:] = [x1′,x2′,x3′,x4′,x5′,x6′,x7′,y1′,y2′,y3′,y4′,y5′,y6′,y7′,
-                  x1″,x2″,x3″,x4″,x5″,x6″,x7″,y1″,y2″,y3″,y4″,y5″,y6″,y7″]
+                  x″[1],x″[2],x″[3],x″[4],x″[5],x″[6],x″[7],y″[1],y″[2],y″[3],y″[4],y″[5],y″[6],y″[7]]
         return nothing
     end
     # initializes storage for y:
@@ -54,7 +58,7 @@ plei = let
 
     jac! = nothing
     mass! = nothing
-    
+
     ic =  T[3, 3, -1, -3, 2, -2, 2,  #x(0)
             3, -3, 2, 0, 0, -4, 4,    #y(0)
             0, 0, 0, 0, 0, 1.75, -1.5, #x'(0)
