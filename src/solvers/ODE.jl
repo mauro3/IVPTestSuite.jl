@@ -49,20 +49,20 @@ end
 
 
 import ODE
+
 ##############################################################################
 #List of all ODE.jl solvers avaible for testing
 ##############################################################################
-ODE_release_solvers = false;
-pwl_solvers = !ODE_release_solvers;
-
-if ODE_release_solvers
+ODE_release =true
+ODE_pwl = !ODE_release
+if ODE_release
     nonstiff_fixedstep= [
                ODE.ode1,
                ODE.ode2_midpoint,
                ODE.ode2_heun,
                ODE.ode4,
-    #           ODE.ode4ms,# not in pwl's PR yet
-    #           ODE.ode5ms, #not in pwl's PR yet
+               ODE.ode4ms,
+               ODE.ode5ms
     #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
                ]
 
