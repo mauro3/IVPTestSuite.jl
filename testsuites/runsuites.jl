@@ -1,11 +1,13 @@
 # Runs all test suites
-import Winston # needs current master (30 Jan 2015)
-const W = Winston
+#import Winston # needs current master (30 Jan 2015)
+#const W = Winston
+import PyPlot
+const Py = PyPlot
 using IVPTestSuite
 
 abstols = 10.0.^(-5:-1:-13)
 reltols = abstols
-ntsteps = [10.^(1:5), 500_000]
+ntsteps = [10.^(1:5); 500_000]
 
 totest = IVPTestSuite.tc_all
 # totest = similar(totest)
@@ -17,4 +19,5 @@ include("suite_ODE.jl")
 include("suite_ODE_fixedstep.jl")
 
 ## plot results
-include("plot_suites.jl")
+#include("plot_suites.jl")
+include("plot_suites_ODE_fixed.jl")

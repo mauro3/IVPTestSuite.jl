@@ -263,6 +263,7 @@ include("eval_tests.jl")
 include("testcases/testcases.jl")
 
 ## Plotting
+#@require Winston include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
 @require Winston include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
 
 end # module

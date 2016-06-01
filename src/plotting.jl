@@ -12,13 +12,14 @@ for p in [:plot, :semilogx, :semilogy, :loglog, :oplot]
             ylabel(string(yfield)*" "*yunit)
         end
     end
+    @show fn
     eval(fn)
 end
 
 
 function Winston.plot(r::TestResults; relerr=false)
     if relerr
-        
+
         plot(relerror(r))
     else
         plot(r.solution)

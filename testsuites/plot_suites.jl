@@ -7,25 +7,25 @@ function make_legend!(leg, res)
     str = string(name(res[1].testrun.solver))
     str = replace(str, "_", "\\_")
     push!(leg, str)
-end    
+end
 
 ## Adaptive steppers
 
 # significant digits (scd) vs walltime
 for (n,tc) in totest
     leg = String[]
-    id = W.figure()
+    id = W.figure() #
     #W.hold(true)
     colind = 1
     p = 1
     maxscd = 0.0
-    
+
     # DASSL.jl
     res = resDASSL[n]
     scd = getfield_vec(res, :scd)
     maxscd = max(maxscd, maximum(scd))
     wt = getfield_vec(res, :walltime)
-    p = W.semilogy(scd, wt, "x"*cols[colind])
+    p = W.semilogy(scd, wt, "x"*cols[colind])#
     make_legend!(leg, res)
     colind +=1
 
@@ -38,7 +38,7 @@ for (n,tc) in totest
         end
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
-        p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])
+        p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
     end
@@ -52,17 +52,17 @@ for (n,tc) in totest
         end
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
-        p = W.oplot(scd, wt, "d"*cols[rem1(colind,nc)])
+        p = W.oplot(scd, wt, "d"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
     end
-    
 
-    W.legend(leg)
+
+    W.legend(leg) #
 
     # And again because otherwise legend doesn't work
     # https://github.com/nolta/Winston.jl/issues/198  (TODO)
-    
+
     # DASSL.jl
     colind = 1
     res = resDASSL[n]
@@ -101,10 +101,11 @@ for (n,tc) in totest
     # tidy up
     # xl = W.xlim() # https://github.com/nolta/Winston.jl/issues/196
 #    W.xlim(0,maxscd)
+
     W.title("$n")
     W.xlabel("significant digits")
     W.ylabel("Walltime (s)")
-           
+
     #W.display(p)
     W.savefig("output/scd-vs-walltime-$n.png")
     W.closefig(id)
@@ -119,7 +120,7 @@ for (n,tc) in totest
     colind = 1
     p = 1
     maxscd = 0.0
-    
+
 
     # # ODE.jl
     rode = resODEfixed[n]
@@ -166,7 +167,7 @@ for (n,tc) in totest
     W.title("$n (fixed step)")
     W.xlabel("significant digits")
     W.ylabel("Walltime (s)")
-           
+
     #W.display(p)
     W.savefig("output/fixedstep-scd-vs-walltime-$n.png")
     W.closefig(id)
