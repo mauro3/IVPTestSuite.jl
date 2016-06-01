@@ -1,7 +1,11 @@
-# This is a sample setup for a test case with an explicit QDE/DAE
-# function.  Fill in the ...
+# Astronomy example from Hairer et al 1992 p.245. As Hairer writes, "a
+# celestial mechanics problem( which we call 'the Pleiades'): seven stars in
+# the plan with coordinates x_i,y_i and masses m_i = i". Time span from
+#t =0 to t= 3. This is a non-stiff problem.
+#
+# Reference solution and a more in depth description can be found in
+# https://archimede.dm.uniba.it/~testset/report/plei.pdf
 
-# First , document the test case here!
 
 export plei
 
