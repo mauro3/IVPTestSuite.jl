@@ -17,7 +17,7 @@ solver = S.ode4
 ###
 # make a TestRun which combines a TestCase with a Solver + some extras:
 #Example protocol for Fixed step solvers
-tsteps = tc.tspan
+tsteps = linspace(tc.tspan[1],tc.tspan[2],10^5)
 tr = TestRunFixedStep(tc, solver, Dict{Symbol,Any}(), tsteps)
 # For adaptive solvers use TestRunAdapt instead. See ex1.jl for such a case.
 
