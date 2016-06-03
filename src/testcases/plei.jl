@@ -19,21 +19,20 @@ plei = let
                                         # matrix, probably Matrix
                                         # (default) or
                                         # SparseMatrixCSC.
-    N = 7
-    dof = 4N::Int # degrees of freedom
+    const N = 7
+    const dof = 4N::Int # degrees of freedom
     dae = 0 ::Int  # index of DAE, ==0 for ODE
     # stiffness of system, one of the three constants
     stiffness = [nonstiff, mildlystiff, stiff][1]
 
-    r = zeros(Float64,7,7)
-    x″= zeros(Float64,7,7)
-    y″= zeros(Float64,7,7)
+    const r = zeros(Float64,7,7)
+    const x″= zeros(Float64,7,7)
+    const y″= zeros(Float64,7,7)
     ## the problem function
     function fn!(t::T,y::Vector{T},dydt::Vector{T})
         # The ode function dydt = f(t,y) modifying dydt in-place.
         # Note that all indices of dydt need to be written!
 
-        x1,x2,x3,x4,x5,x6,x7,y1,y2,y3,y4,y5,y6,y7,x1′,x2′,x3′,x4′,x5′,x6′,x7′,y1′,y2′,y3′,y4′,y5′,y6′,y7′ = y[:]
         #parameters
         #println(r)
         for i = 1:N
@@ -52,8 +51,16 @@ plei = let
             end
           end
         end
-        dydt[:] = [x1′,x2′,x3′,x4′,x5′,x6′,x7′,y1′,y2′,y3′,y4′,y5′,y6′,y7′,
-                  x″[1],x″[2],x″[3],x″[4],x″[5],x″[6],x″[7],y″[1],y″[2],y″[3],y″[4],y″[5],y″[6],y″[7]]
+
+        for i=1:2N
+            dydt[i] = d[2N+i]
+        end
+        for i=1:N
+            dydt[2N+i] = x″[i]
+        end
+        for i=1:N
+            dydt[3N+i] = y″[i]
+        end
         return nothing
     end
     # initializes storage for y:
@@ -74,9 +81,9 @@ plei = let
     tspan = T[0, 3] # integration interval
 
     refsol = T[0.3706139143970502,3.237284092057233,-3.222559032418324,0.6597091455775310, 0.3425581707156584, 1.562172101400631,-0.7003092922212495,
-    -3.943437585517392,-3.271380973972550, 5.225081843456543, -2.590612434977470, 1.198213693392275, -2429682344935824,1.091449240428980,
-    3.417003806314313, 1.354584501625501, -2.590065597810775, 2.025053734714242, -1.155815100160448, -0.8072988170223021, 0.5952396354208710,
-    -3.741244961234010, 0.3773459685750630, 0.9386858869551073, 0.3667922227200571, -0.3474046353808490, 2.344915448180937, -1.947020434263292]
+               -3.943437585517392,-3.271380973972550, 5.225081843456543, -2.590612434977470, 1.198213693392275, -2429682344935824,1.091449240428980,
+               3.417003806314313, 1.354584501625501, -2.590065597810775, 2.025053734714242, -1.155815100160448, -0.8072988170223021, 0.5952396354208710,
+               -3.741244961234010, 0.3773459685750630, 0.9386858869551073, 0.3667922227200571, -0.3474046353808490, 2.344915448180937, -1.947020434263292]
               # reference solution at tspan[2]
 
     refsolinds = trues(dof)   # if refsol does not contain all indices
