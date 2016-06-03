@@ -12,7 +12,7 @@ tc = IVPTestSuite.tc_all[tc_name]
 
 # Pick a solver.  S.allsolvers is the list of all solvers.  Generally
 # each family of solvers also has a list.
-solver = S.ode45_dp
+solver = S.ODEsolvers[3] #S.ode45_dp
 
 # make a TestRun which combines a TestCase with a Solver + some extras:
 ##Example protocol For adaptive solvers

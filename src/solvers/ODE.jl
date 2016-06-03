@@ -57,50 +57,40 @@ begin
     ODEsolvers = Any[]
     sl = 1 # to make it global so it works with eval
     # adaptive non-stiff solvers
-    for fn in [:(ODE.ode21),
-              :(ODE.ode23),
-              :(ODE.ode45_dp),
-              :(ODE.ode45_fe),
-              :(ODE.ode78),
+    for fn in [ODE.ode21,
+               ODE.ode23,
+               ODE.ode45_dp,
+               ODE.ode45_fe,
+               ODE.ode78,
               ]
-        n = fn.args[2].value
-        if fn==:(ODE.ode54)
+        if fn==ODE.ode54
             stiffness = mildlystiff
         else
             stiffness = nonstiff
         end
-        sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, stiffness, adaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
+        sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, stiffness, adaptive, ode_only, explicit_eq)
         push!(ODEsolvers, sl)
     end
     # fixed step non-stiff solvers
-    for fn in [:(ODE.ode4),
-              :(ODE.ode4ms),
+    for fn in [ODE.ode4,
+              ODE.ode4ms
 #              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
               ]
-        n = fn.args[2].value
-        sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
+        sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
         push!(ODEsolvers, sl)
     end
 
     # adaptive stiff solvers
-    for fn in [:(ODE.ode23s)]
-        n = fn.args[2].value
-        fn_str = string(n)
-        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
+    for fn in [ODE.ode23s]
+        sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
         push!(ODEsolvers, sl)
     end
 
     # fixed step stiff solvers
-    for fn in [#:(ODE.ode4s),
-              :(ODE.ode4s_s),
-              :(ODE.ode4s_kr)]
-        n = fn.args[2].value
-        fn_str = string(n)
-        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
+    for fn in [#ODE.ode4s,
+               ODE.ode4s_s,
+               ODE.ode4s_kr]
+        sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
         push!(ODEsolvers, sl)
     end
     append!(allsolvers, ODEsolvers)
