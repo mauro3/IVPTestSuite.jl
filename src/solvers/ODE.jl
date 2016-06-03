@@ -55,6 +55,7 @@ begin
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
     # import ODE
     ODEsolvers = Any[]
+    ODEsolvers_dict = Dict{Any,Solver}()
     sl = 1 # to make it global so it works with eval
     # adaptive non-stiff solvers
     for fn in [ODE.ode21,
@@ -70,6 +71,7 @@ begin
         end
         sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, stiffness, adaptive, ode_only, explicit_eq)
         push!(ODEsolvers, sl)
+        ODEsolvers[fn] = sl
     end
     # fixed step non-stiff solvers
     for fn in [ODE.ode4,
