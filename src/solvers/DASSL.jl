@@ -36,13 +36,13 @@ begin
         else
             kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol))
         end
-        
+
         ###
         # 2) Call solver, if it does not succeed throw an error (if that
         # is not done anyway)
-        (t,y) = so.solverfn(args...; kwargs...)  
+        (t,y) = so.solverfn(args...; kwargs...)
         # (probably no need to modify this section)
-    
+
         ###
         # 3) Transform output to conform to standard:
         # tend -- end time reached
@@ -54,11 +54,13 @@ begin
         stats = (-1, -1, -1, -1, -1)
         return tend, yend, stats
     end
-    
+
     daeindex = 1
     adaptive = true
     dassl = Solver{:im}(DASSL.dasslSolve, DASSL, dassl_wrapper, stiff, adaptive, daeindex, explicit_mass_eq)
-    DASSLsolvers = [dassl]
-    push!(allsolvers, dassl)
-end
 
+    DASSLsolvers = Dict{Any,Solver}()
+    DASSLsolvers[DASSL.dasslSolve] = dassl
+    
+    allsolvers = merge(allsolvers, DASSLsolvers)
+end

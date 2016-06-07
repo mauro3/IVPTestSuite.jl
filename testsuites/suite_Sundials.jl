@@ -1,4 +1,4 @@
-# this eats memory 
+# this eats memory
 
 resSun = Dict{Symbol,Dict}()
 const S = Solvers

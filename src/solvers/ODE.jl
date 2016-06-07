@@ -49,6 +49,74 @@ end
 
 import ODE
 
+
+##############################################################################
+#List of all ODE.jl solvers avaible for testing
+##############################################################################
+ODE_release =true
+ODE_pwl = !ODE_release
+if ODE_release
+    nonstiff_fixedstep= [
+               ODE.ode1,
+               ODE.ode2_midpoint,
+               ODE.ode2_heun,
+               ODE.ode4,
+               ODE.ode4ms,
+               ODE.ode5ms
+    #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
+               ]
+
+    ## Non-stiff fixed step solvers
+    nonstiff_adaptive=[
+    #          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
+               ODE.ode23,
+               ODE.ode45,
+               ODE.ode45_dp,
+               ODE.ode45_fe,
+               ODE.ode78
+               ]
+    # Stiff fixed-step solvers
+    stiff_fixedstep=[
+               ODE.ode4s_s,
+               ODE.ode4s_kr
+               ]
+    #Stiff adaptive solvers
+    stiff_adaptive = [
+               ODE.ode23s
+     #          ODE.odeRadauIIA #RADAU methods under construction
+               ]
+elseif ODE_pwl
+    nonstiff_fixedstep= [
+               ODE.ode1,
+               ODE.ode2_midpoint,
+               ODE.ode2_heun,
+               ODE.ode4,
+               #ODE.ode4ms,
+               #ODE.ode5ms
+    #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
+               ]
+
+    ## Non-stiff fixed step solvers
+    nonstiff_adaptive=[
+    #          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
+               ODE.ode23,
+               ODE.ode45,
+               ODE.ode45_dp,
+               ODE.ode45_fe,
+               ODE.ode78
+               ]
+    # Stiff fixed-step solvers
+    stiff_fixedstep=[
+               ODE.ode4s_s,
+               ODE.ode4s_kr
+               ]
+    #Stiff adaptive solvers
+    stiff_adaptive = [
+               ODE.ode23s
+     #         ODE.odeRadauIIA #RADAU methods under construction
+               ]
+end
+
 ode_only = 0 # dae index
 pkg = "ODE.jl"
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
@@ -56,35 +124,25 @@ pkg = "ODE.jl"
 ODEsolvers = Dict{Any,Solver}()
 sl = 1 # to make it global so it works with eval
 # adaptive non-stiff solvers
-for fn in [ODE.ode21,
-           ODE.ode23,
-           ODE.ode45_dp,
-           ODE.ode45_fe,
-           ODE.ode78,
-           ]
+for fn in nonstiff_adaptive
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
 # fixed step non-stiff solvers
-for fn in [ODE.ode4,
-           ODE.ode4ms
-           #              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
-           ]
+for fn in nonstiff_fixedstep
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
 
 # adaptive stiff solvers
-for fn in [ODE.ode23s]
+for fn in stiff_adaptive
     sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
 
 # fixed step stiff solvers
-for fn in [#ODE.ode4s,
-           ODE.ode4s_s,
-           ODE.ode4s_kr]
+for fn in stiff_fixedstep
     sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
-# append!(allsolvers, ODEsolvers) # allsolver should be a Dict too.
+allsolvers = merge(allsolvers, ODEsolvers)

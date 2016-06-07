@@ -6,7 +6,7 @@ using IVPTestSuite
 const adaptive = true
 const nonadaptive = false
 
-allsolvers = Solver[] # to hold all solvers
+allsolvers = Dict{Any,Solver}() # to hold all solvers
 
 # helper
 function nonmod_fn{N,T}(tc::TestCase{N,T})
