@@ -249,5 +249,6 @@ begin
 
     sundialssolvers = Dict{Any,Solver}()
     sundialssolvers[Sundials.IDASolve] = ida
+
     allsolvers = merge(allsolvers, sundialssolvers)
 end
