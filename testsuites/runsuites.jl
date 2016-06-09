@@ -18,6 +18,8 @@ totest = IVPTestSuite.tc_all
 include("suite_ODE.jl")
 include("suite_ODE_fixedstep.jl")
 
+
 ## plot results
 #include("plot_suites.jl")
-include("plot_suites_ODE_fixed.jl")
+#include("plot_suites_ODE_fixed.jl")
+include("plot_suites_ODE_adaptive.jl")
