@@ -5,8 +5,10 @@ const S = Solvers
 
 for (n,tc) in totest
     res = Dict{Solver,Any}()
-    for solver in S.sundialssolvers
-        if solver.solverfn==Sundials.idasol || solver.solverfn==Sundials.cvode
+    for (solverfn,solver) in S.sundialssolvers
+        @show solverfn
+        @show solver
+        if solverfn==Sundials.idasol || solverfn==Sundials.cvode
             continue
         end
         if isapplicable(solver, tc) && isadaptive(solver)
