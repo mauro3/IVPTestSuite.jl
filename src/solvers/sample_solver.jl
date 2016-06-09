@@ -16,19 +16,19 @@ function wrapped_solver(tr::TestRun)
     so = tr.solver
     ###
     # 0) Wrap tc.fn!, tc.jac!, tc.mass! if necessary
-    
+
     ###
     # 1) Make call signature
 
     args = ...
     kwargs = ...
-    
+
     ###
     # 2) Call solver, if it does not succeed throw an error (if that
     # is not done anyway)
-    out = so.solverfn(args...; kwargs...)  
+    out = so.solverfn(args...; kwargs...)
     # (probably no need to modify this section)
-    
+
     ###
     # 3) Transform output to conform to standard:
     # tend -- end time reached
@@ -38,9 +38,9 @@ function wrapped_solver(tr::TestRun)
     ...
     return tend, yend, stats
 end
-    
+
 solverfn = ...::Function # the actual solver function, for example ODE.ode23s.
-# choose from 
+# choose from
 typ =  [:ex, :im, :imex][2]                    # Typ: :ex (explicit method), :im (implicit method), :imex (IMEX method)
 stiffness = [nonstiff, mildlystiff, stiff][1]  # stiff, mildly stiff or non-stiff solver
 adaptive = [true, false][1]                    # is the solver adaptive
@@ -52,6 +52,6 @@ solverpkg = MyPkg
 
 myodesolver = Solver{typ}(solverfn, solverpkg, wrapped_solver, stiffness, adaptive, daeindex, explicit_eq)
 
-push!(allsolvers, myodesolver)
+allsolvers[solverfn] = myodesolver
 
 # end # @require MyOdeSolver begin
