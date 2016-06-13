@@ -146,4 +146,4 @@ for fn in stiff_fixedstep
     sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
-allsolvers = merge(allsolvers, ODEsolvers)
+merge!(allsolvers, ODEsolvers)

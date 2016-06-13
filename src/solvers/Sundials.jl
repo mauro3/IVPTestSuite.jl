@@ -47,7 +47,6 @@ end
 daeindex = 0
 adaptive = true
 cvode_simple = Solver{:im}(Sundials.cvode, Sundials, wrapper_CVODE_simple, stiff, adaptive, daeindex, explicit_eq)
-push!(sundialssolvers, cvode_simple)
 sundialssolvers[Sundials.cvode] = cvode_simple
 
 # CVode wrapper to low level interface: Sundials.CVode
@@ -250,4 +249,4 @@ ida = Solver{:im}(Sundials.IDASolve, Sundials, wrapper_IDA, stiff, adaptive, dae
 
 sundialssolvers[Sundials.IDASolve] = ida
 
-allsolvers = merge(allsolvers, sundialssolvers)
+merge!(allsolvers, sundialssolvers)

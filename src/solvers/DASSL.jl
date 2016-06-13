@@ -61,6 +61,6 @@ begin
 
     DASSLsolvers = Dict{Any,Solver}()
     DASSLsolvers[DASSL.dasslSolve] = dassl
-    
-    allsolvers = merge(allsolvers, DASSLsolvers)
+
+    merge!(allsolvers, DASSLsolvers)
 end
