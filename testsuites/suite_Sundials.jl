@@ -6,8 +6,6 @@ const S = Solvers
 for (n,tc) in totest
     res = Dict{Solver,Any}()
     for (solverfn,solver) in S.sundialssolvers
-        @show solverfn
-        @show solver
         if solverfn==Sundials.idasol || solverfn==Sundials.cvode
             continue
         end
