@@ -49,59 +49,9 @@ end
 
 
 import ODE
-begin
-    ode_only = 0 # dae index
-    pkg = "ODE.jl"
-#    ode23s = Solver{:im}(ODE.ode23s, stiff)
-    # import ODE
-    ODEsolvers = Any[]
-    sl = 1 # to make it global so it works with eval
-    # adaptive non-stiff solvers
-    for fn in [:(ODE.ode21),
-              :(ODE.ode23),
-              :(ODE.ode45_dp),
-              :(ODE.ode45_fe),
-              :(ODE.ode78),
-              :(ODE.ode_ab_adaptive)
-              ]
-        n = fn.args[2].value
-        if fn==:(ODE.ode54)
-            stiffness = mildlystiff
-        else
-            stiffness = nonstiff
-        end
-        sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, stiffness, adaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
-    # fixed step non-stiff solvers
-    for fn in [:(ODE.ode4),
-              :(ODE.ode4ms),
-#              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
-              ]
-        n = fn.args[2].value
-        sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
-
-<<<<<<< 709c3b56aec8f9124d19de09ee72f0cedcb7baa3
 ##############################################################################
 #List of all ODE.jl solvers avaible for testing
 ##############################################################################
-ODE_release =true
-ODE_pwl = !ODE_release
-if ODE_release
-    nonstiff_fixedstep= [
-               ODE.ode1,
-               ODE.ode2_midpoint,
-               ODE.ode2_heun,
-               ODE.ode4,
-               ODE.ode4ms,
-               ODE.ode5ms
-    #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
-               ]
-
 ## Non-stiff fixed step solvers
 nonstiff_fixedstep= [
            ODE.ode1,
@@ -122,9 +72,7 @@ nonstiff_adaptive=[
            ODE.ode78,
 #          ODE.ode_ab_adaptive #Adaptive Adam Bashforth under construction
            ]
-
-
-# Stiff fixed-step solvers
+## Stiff fixed-step solvers
 stiff_fixedstep=[
            ODE.ode4s_s,
            ODE.ode4s_kr
@@ -146,6 +94,8 @@ for fn in nonstiff_adaptive
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
+
+# fixed step non-stiff solvers
 for fn in nonstiff_fixedstep
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
