@@ -62,6 +62,7 @@ begin
               :(ODE.ode45_dp),
               :(ODE.ode45_fe),
               :(ODE.ode78),
+              :(ODE.ode_ab_adaptive)
               ]
         n = fn.args[2].value
         if fn==:(ODE.ode54)

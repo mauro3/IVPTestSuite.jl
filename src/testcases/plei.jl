@@ -53,7 +53,7 @@ plei = let
         end
 
         for i=1:2N
-            dydt[i] = d[2N+i]
+            dydt[i] = dydt[2N+i]
         end
         for i=1:N
             dydt[2N+i] = x″[i]
