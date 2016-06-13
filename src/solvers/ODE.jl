@@ -53,70 +53,38 @@ import ODE
 ##############################################################################
 #List of all ODE.jl solvers avaible for testing
 ##############################################################################
-ODE_release =true
-ODE_pwl = !ODE_release
-if ODE_release
-    ## Non-stiff fixed step solvers
-    nonstiff_fixedstep= [
-               ODE.ode1,
-               ODE.ode2_midpoint,
-               ODE.ode2_heun,
-               ODE.ode4,
-               ODE.ode4ms,
-               ODE.ode5ms
-    #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
-               ]
-    ## Non-stiff adaptive step solvers
-    nonstiff_adaptive=[
-    #          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
-               ODE.ode23,
-               ODE.ode45,
-               ODE.ode45_dp,
-               ODE.ode45_fe,
-               ODE.ode78,
-               ODE.ode_ab_adaptive
-               ]
-    # Stiff fixed-step solvers
-    stiff_fixedstep=[
-               ODE.ode4s_s,
-               ODE.ode4s_kr
-               ]
-    #Stiff adaptive solvers
-    stiff_adaptive = [
-               ODE.ode23s
-     #          ODE.odeRadauIIA #RADAU methods under construction
-               ]
-elseif ODE_pwl
-    nonstiff_fixedstep= [
-               ODE.ode1,
-               ODE.ode2_midpoint,
-               ODE.ode2_heun,
-               ODE.ode4,
-               #ODE.ode4ms,
-               #ODE.ode5ms
-    #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
-               ]
 
-    ## Non-stiff fixed step solvers
-    nonstiff_adaptive=[
-    #          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
-               ODE.ode23,
-               ODE.ode45,
-               ODE.ode45_dp,
-               ODE.ode45_fe,
-               ODE.ode78
-               ]
-    # Stiff fixed-step solvers
-    stiff_fixedstep=[
-               ODE.ode4s_s,
-               ODE.ode4s_kr
-               ]
-    #Stiff adaptive solvers
-    stiff_adaptive = [
-               ODE.ode23s
-     #         ODE.odeRadauIIA #RADAU methods under construction
-               ]
-end
+## Non-stiff fixed step solvers
+nonstiff_fixedstep= [
+           ODE.ode1,
+           ODE.ode2_midpoint,
+           ODE.ode2_heun,
+           ODE.ode4,
+           ODE.ode4ms,
+           ODE.ode5ms
+#          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
+           ]
+## Non-stiff adaptive step solvers
+nonstiff_adaptive=[
+#          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
+           ODE.ode23,
+           ODE.ode45,
+           ODE.ode45_dp,
+           ODE.ode45_fe,
+           ODE.ode78,
+#          ODE.ode_ab_adaptive #Adaptive Adam Bashforth under construction
+           ]
+## Stiff fixed-step solvers
+stiff_fixedstep=[
+           ODE.ode4s_s,
+           ODE.ode4s_kr
+           ]
+## Stiff adaptive solvers
+stiff_adaptive = [
+           ODE.ode23s
+ #          ODE.odeRadauIIA #RADAU methods under construction
+           ]
+
 
 ode_only = 0 # dae index
 pkg = "ODE.jl"

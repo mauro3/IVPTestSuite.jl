@@ -12,7 +12,6 @@ tc = IVPTestSuite.tc_all[tc_name]
 
 # Pick a solver.  S.allsolvers is the list of all solvers.  Generally
 # each family of solvers also has a list.
-solver = S.ODEsolvers[ODE.ode_ab_adaptive]
 solver = S.ODEsolvers[ODE.ode78]
 solver = S.ODEsolvers[ODE.ode45]
 
