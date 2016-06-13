@@ -26,8 +26,6 @@ plei = let
     stiffness = [nonstiff, mildlystiff, stiff][1]
 
     const r = zeros(Float64,7,7)
-    const x″= zeros(Float64,7,7)
-    const y″= zeros(Float64,7,7)
     ## the problem function
     function fn!(t::T,y::Vector{T},dydt::Vector{T})
         # The ode function dydt = f(t,y) modifying dydt in-place.
@@ -39,27 +37,15 @@ plei = let
           for j =1:N
             if i != j
               r[i,j] = ((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2)
-            end
-          end
-        end
-
-        for i = 1:N
-          for j =1:N
-            if i != j
-              x″[i] =+ j*(y[j] - y[i])/r[i,j]  #j factor is mass of particles
-              y″[i] =+ j*(y[j+N] - y[i+N])/r[i,j]
+              #Note, for what follows dydt[2N+i] = x″[i] and   dydt[3N+i] = y″[i]
+              dydt[2N+i] =+ j*(y[j] - y[i])/r[i,j]  #j factor is mass of particles,
+              dydt[3N+i] =+ j*(y[j+N] - y[i+N])/r[i,j]
             end
           end
         end
 
         for i=1:2N
             dydt[i] = dydt[2N+i]
-        end
-        for i=1:N
-            dydt[2N+i] = x″[i]
-        end
-        for i=1:N
-            dydt[3N+i] = y″[i]
         end
         return nothing
     end

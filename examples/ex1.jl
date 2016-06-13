@@ -8,7 +8,7 @@ tc_name = [:plei
            :threebody
            :bruss1d
            :chemakzo
-           :hires][1]
+           :hires][4]
 tc = IVPTestSuite.tc_all[tc_name]
 
 # Pick a solver.  S.allsolvers is the list of all solvers.  Generally
