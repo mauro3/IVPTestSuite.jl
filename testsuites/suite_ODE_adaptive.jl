@@ -5,8 +5,6 @@ for (n,tc) in totest
     res = Dict{Solver,Any}()
     for solver in S.ODEsolvers
         if isapplicable(solver, tc) && isadaptive(solver)
-            @show solver.solverfn
-            @show suite = TestSuite(tc, solver, abstols, reltols, [NaN])
             res[solver] = run_ode_testsuite(suite)
         end
     end

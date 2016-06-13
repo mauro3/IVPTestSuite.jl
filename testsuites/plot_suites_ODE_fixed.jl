@@ -16,9 +16,7 @@ for (n,tc) in totest
   if tc == totest[:threebody]
 
     leg = AbstractString[]
-    #id = W.figure()
     id = Py.figure()
-    #W.hold(true)
     colind = 1
     p = 1
     p2 = 1
@@ -41,19 +39,16 @@ for (n,tc) in totest
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
         if fst
-            #p = W.semilogy(scd, wt, "o"*cols[colind])
-            p2 = Py.semilogy(scd, wt, "o"*cols[colind])
+            p2 = Py.semilogy(scd, wt, "-o"*cols[colind])
             fst = false
         else
-            #p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])
-            p2 = Py.plot(scd, wt, "o"*cols[colind],hold = true)
+            p2 = Py.plot(scd, wt, "-o"*cols[colind],hold = true)
 
         end
         make_legend!(leg, res)
         colind +=1
     end
 
-    #W.legend(leg)
     Py.legend(leg)
 #=
     # And again because otherwise legend doesn't work
@@ -85,7 +80,7 @@ for (n,tc) in totest
     Py.xlabel("significant digits")
     Py.ylabel("Walltime (s)")
 
-    Py.display(p2)
+    Py.display(id)
     Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n-pwl.png")
     Py.close(id)
 

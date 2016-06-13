@@ -14,9 +14,7 @@ end
 # significant digits (scd) vs walltime
 for (n,tc) in totest
     leg = AbstractString[]
-    #id = W.figure()
     id = Py.figure()
-    #W.hold(true)
     colind = 1
     p = 1
     maxscd = 0.0
@@ -31,8 +29,7 @@ for (n,tc) in totest
         end
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
-        #p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])#
-        p2 = Py.plot(scd, wt, "-o"*cols[rem1(colind,nc)])#
+        p = Py.plot(scd, wt, "-o"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
     end

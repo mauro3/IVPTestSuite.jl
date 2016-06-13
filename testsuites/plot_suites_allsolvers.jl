@@ -37,7 +37,6 @@ for (n,tc) in totest
         end
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
-        #p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])#
         p2 = Py.plot(scd, wt, "-o"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
@@ -63,14 +62,14 @@ for (n,tc) in totest
     Py.legend(leg) #
 
     # tidy up
-    # xl = W.xlim() # https://github.com/nolta/Winston.jl/issues/196
-#    W.xlim(0,maxscd)
+    # xl = Py.xlim() # https://github.com/nolta/Winston.jl/issues/196
+#    Py.xlim(0,maxscd)
 
     Py.title("$n")
     Py.xlabel("significant digits")
     Py.ylabel("Walltime (s)")
 
-    #W.display(p)
+    Py.display(id)
     Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/scd-vs-walltime-$n.png")
     Py.close(id)
 end
@@ -81,9 +80,7 @@ for (n,tc) in totest
   if tc == totest[:threebody]
 
     leg = AbstractString[]
-    #id = W.figure()
     id = Py.figure()
-    #W.hold(true)
     colind = 1
     p = 1
     p2 = 1
@@ -138,7 +135,7 @@ for (n,tc) in totest
     Py.xlabel("significant digits")
     Py.ylabel("Walltime (s)")
 
-    #W.display(p)
+    Py.display(id)
     Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
     Py.close(id)
 end
