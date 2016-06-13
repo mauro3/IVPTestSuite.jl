@@ -56,6 +56,7 @@ import ODE
 ODE_release =true
 ODE_pwl = !ODE_release
 if ODE_release
+    ## Non-stiff fixed step solvers
     nonstiff_fixedstep= [
                ODE.ode1,
                ODE.ode2_midpoint,
@@ -65,15 +66,15 @@ if ODE_release
                ODE.ode5ms
     #          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
                ]
-
-    ## Non-stiff fixed step solvers
+    ## Non-stiff adaptive step solvers
     nonstiff_adaptive=[
     #          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
                ODE.ode23,
                ODE.ode45,
                ODE.ode45_dp,
                ODE.ode45_fe,
-               ODE.ode78
+               ODE.ode78,
+               ODE.ode_ab_adaptive
                ]
     # Stiff fixed-step solvers
     stiff_fixedstep=[
