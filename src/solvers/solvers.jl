@@ -6,7 +6,7 @@ using IVPTestSuite
 const adaptive = true
 const nonadaptive = false
 
-allsolvers = Solver[] # to hold all solvers
+const allsolvers = Dict{Any,Solver}() # to hold all solvers
 
 # helper
 function nonmod_fn{N,T}(tc::TestCase{N,T})
@@ -26,8 +26,5 @@ end
 include("ODE.jl")
 include("DASSL.jl")
 include("Sundials.jl")
-# TODO:
-# - ApproxFun has BDF in ApproxFun.jl/src/Extras/timeevolution.jl
-# - SciPy solvers
 
 end # module

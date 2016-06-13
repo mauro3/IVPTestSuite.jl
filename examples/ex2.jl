@@ -8,11 +8,11 @@ tc_name = [:vdpol
            :bruss1d
            :chemakzo
            :hires][3]
-tc = IVPTestSuite.tc_all[tc_name]           
+tc = IVPTestSuite.tc_all[tc_name]
 
 # Pick a solver.  S.allsolvers is the list of all solvers.  Generally
 # each family of solvers also has a list.
-solver = S.ode45_dp
+solver = S.allsolvers[ODE.ode45_dp]
 
 ###
 # make a TestRun which combines a TestCase with a Solver + some extras:
@@ -23,4 +23,3 @@ suite = TestSuite(tc, solver, abstols, reltols, [NaN])
 
 # running it will display some results:
 res = run_ode_testsuite(suite)
-

@@ -47,61 +47,71 @@ function ODEjl_wrapper(tr::TestRun)
     return tend, yend, stats
 end
 
-#@require ODE begin # bug!
 import ODE
-begin
-    ode_only = 0 # dae index
-    pkg = "ODE.jl"
+
+
+##############################################################################
+#List of all ODE.jl solvers avaible for testing
+##############################################################################
+
+## Non-stiff fixed step solvers
+nonstiff_fixedstep= [
+           ODE.ode1,
+           ODE.ode2_midpoint,
+           ODE.ode2_heun,
+           ODE.ode4,
+           ODE.ode4ms,
+           ODE.ode5ms
+#          ODE.ode_imp_ab #Implicit Adam Bashforth under construction
+           ]
+## Non-stiff adaptive step solvers
+nonstiff_adaptive=[
+#          ODE.ode21, # this fails on Travis with 0.4?! TODO revert once fixed.
+           ODE.ode23,
+           ODE.ode45,
+           ODE.ode45_dp,
+           ODE.ode45_fe,
+           ODE.ode78,
+#          ODE.ode_ab_adaptive #Adaptive Adam Bashforth under construction
+           ]
+## Stiff fixed-step solvers
+stiff_fixedstep=[
+           ODE.ode4s_s,
+           ODE.ode4s_kr
+           ]
+## Stiff adaptive solvers
+stiff_adaptive = [
+           ODE.ode23s
+ #          ODE.odeRadauIIA #RADAU methods under construction
+           ]
+
+
+ode_only = 0 # dae index
+pkg = "ODE.jl"
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
-    # import ODE
-    ODEsolvers = Any[]
-    sl = 1 # to make it global so it works with eval
-    # adaptive non-stiff solvers
-    for fn in [:(ODE.ode21),
-              :(ODE.ode23),
-              :(ODE.ode45_dp),
-              :(ODE.ode45_fe),
-              :(ODE.ode78),
-              ]
-        n = fn.args[2].value
-        if fn==:(ODE.ode54)
-            stiffness = mildlystiff
-        else
-            stiffness = nonstiff
-        end
-        sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, stiffness, adaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
-    # fixed step non-stiff solvers
-    for fn in [:(ODE.ode4),
-              :(ODE.ode4ms),
-#              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
-              ]
-        n = fn.args[2].value
-        sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
 
-    # adaptive stiff solvers
-    for fn in [:(ODE.ode23s)]
-        n = fn.args[2].value
-        fn_str = string(n)
-        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
-
-    # fixed step stiff solvers
-    for fn in [#:(ODE.ode4s),
-              :(ODE.ode4s_s),
-              :(ODE.ode4s_kr)]
-        n = fn.args[2].value
-        fn_str = string(n)
-        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
-    append!(allsolvers, ODEsolvers)
+ODEsolvers = Dict{Any,Solver}()
+sl = 1 # to make it global so it works with eval
+# adaptive non-stiff solvers
+for fn in nonstiff_adaptive
+    sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, adaptive, ode_only, explicit_eq)
+    ODEsolvers[fn] = sl
 end
+# fixed step non-stiff solvers
+for fn in nonstiff_fixedstep
+    sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
+    ODEsolvers[fn] = sl
+end
+
+# adaptive stiff solvers
+for fn in stiff_adaptive
+    sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
+    ODEsolvers[fn] = sl
+end
+
+# fixed step stiff solvers
+for fn in stiff_fixedstep
+    sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
+    ODEsolvers[fn] = sl
+end
+merge!(allsolvers, ODEsolvers)
