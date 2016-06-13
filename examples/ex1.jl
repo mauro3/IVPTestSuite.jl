@@ -2,12 +2,13 @@ using IVPTestSuite  # imports ODE, DASSL and Sundials
 const S = Solvers # for convenience
 
 # choose test-case (all of them are in IVPTestSuite.tc_all)
-tc_name = [:vdpol
+tc_name = [:plei
+           :vdpol
            :rober
            :threebody
            :bruss1d
            :chemakzo
-           :hires][3]
+           :hires][4]
 tc = IVPTestSuite.tc_all[tc_name]
 
 # Pick a solver.  S.allsolvers is the list of all solvers.  Generally
@@ -16,7 +17,7 @@ solver = S.ODEsolvers[ODE.ode78]
 
 # make a TestRun which combines a TestCase with a Solver + some extras:
 ##Example protocol For adaptive solvers
-abstol = 1e-7
+abstol = 1e-10
 reltol = abstol
 dt0 = NaN # size of first step
 tr = TestRunAdapt(tc, solver, Dict{Symbol,Any}(), abstol, reltol, dt0)

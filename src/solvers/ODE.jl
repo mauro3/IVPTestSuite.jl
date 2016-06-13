@@ -47,13 +47,11 @@ function ODEjl_wrapper(tr::TestRun)
     return tend, yend, stats
 end
 
+
 import ODE
-
-
 ##############################################################################
 #List of all ODE.jl solvers avaible for testing
 ##############################################################################
-
 ## Non-stiff fixed step solvers
 nonstiff_fixedstep= [
            ODE.ode1,
@@ -85,10 +83,10 @@ stiff_adaptive = [
  #          ODE.odeRadauIIA #RADAU methods under construction
            ]
 
-
 ode_only = 0 # dae index
 pkg = "ODE.jl"
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
+
 
 ODEsolvers = Dict{Any,Solver}()
 sl = 1 # to make it global so it works with eval
@@ -97,6 +95,7 @@ for fn in nonstiff_adaptive
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
 end
+
 # fixed step non-stiff solvers
 for fn in nonstiff_fixedstep
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)

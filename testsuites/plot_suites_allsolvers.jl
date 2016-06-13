@@ -7,25 +7,24 @@ function make_legend!(leg, res)
     str = string(name(res[1].testrun.solver))
     str = replace(str, "_", "\\_")
     push!(leg, str)
-end    
+end
 
 ## Adaptive steppers
 
 # significant digits (scd) vs walltime
 for (n,tc) in totest
-    leg = String[]
-    id = W.figure()
-    #W.hold(true)
+    leg = AbstractString[]
+    id = Py.figure()
     colind = 1
     p = 1
     maxscd = 0.0
-    
+
     # DASSL.jl
     res = resDASSL[n]
     scd = getfield_vec(res, :scd)
     maxscd = max(maxscd, maximum(scd))
     wt = getfield_vec(res, :walltime)
-    p = W.semilogy(scd, wt, "x"*cols[colind])
+    p2 = Py.semilogy(scd, wt, "-x"*cols[colind])
     make_legend!(leg, res)
     colind +=1
 
@@ -38,12 +37,13 @@ for (n,tc) in totest
         end
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
-        p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])
+        p2 = Py.plot(scd, wt, "-o"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
     end
 
-    # Sundials
+    #= Currently, Sundials seems to be deprecated and not working
+    #Sundials
     rsun = resSun[n]
     for (s,res) in rsun
         scd = getfield_vec(res, :scd)
@@ -52,79 +52,45 @@ for (n,tc) in totest
         end
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
-        p = W.oplot(scd, wt, "d"*cols[rem1(colind,nc)])
+        #p = W.oplot(scd, wt, "d"*cols[rem1(colind,nc)])#
+        p = Py.oplot(scd, wt, "d"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
     end
-    
+    =#
 
-    W.legend(leg)
-
-    # And again because otherwise legend doesn't work
-    # https://github.com/nolta/Winston.jl/issues/198  (TODO)
-    
-    # DASSL.jl
-    colind = 1
-    res = resDASSL[n]
-    scd = getfield_vec(res, :scd)
-    maxscd = max(maxscd, maximum(scd))
-    wt = getfield_vec(res, :walltime)
-    p = W.oplot(scd, wt, "-"*cols[colind])
-    colind +=1
-
-    # # ODE.jl
-    rode = resODE[n]
-    for (s,res) in rode
-        scd = getfield_vec(res, :scd)
-        if all(isnan(scd))
-            continue
-        end
-        maxscd = max(maxscd, maximum(scd))
-        wt = getfield_vec(res, :walltime)
-        p = W.oplot(scd, wt, "-"*cols[rem1(colind,nc)])
-        colind +=1
-    end
-
-    # Sundials
-    rsun = resSun[n]
-    for (s,res) in rsun
-        scd = getfield_vec(res, :scd)
-        if all(isnan(scd))
-            continue
-        end
-        maxscd = max(maxscd, maximum(scd))
-        wt = getfield_vec(res, :walltime)
-        p = W.oplot(scd, wt, "-"*cols[rem1(colind,nc)])
-        colind +=1
-    end
+    Py.legend(leg) #
 
     # tidy up
-    # xl = W.xlim() # https://github.com/nolta/Winston.jl/issues/196
-#    W.xlim(0,maxscd)
-    W.title("$n")
-    W.xlabel("significant digits")
-    W.ylabel("Walltime (s)")
-           
-    #W.display(p)
-    W.savefig("output/scd-vs-walltime-$n.png")
-    W.closefig(id)
+    # xl = Py.xlim() # https://github.com/nolta/Winston.jl/issues/196
+#    Py.xlim(0,maxscd)
+
+    Py.title("$n")
+    Py.xlabel("significant digits")
+    Py.ylabel("Walltime (s)")
+
+    Py.display(id)
+    Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/scd-vs-walltime-$n.png")
+    Py.close(id)
 end
 
 ## Fixed step solvers
 # significant digits (scd) vs walltime
 for (n,tc) in totest
-    leg = String[]
-    id = W.figure()
-    #W.hold(true)
+  if tc == totest[:threebody]
+
+    leg = AbstractString[]
+    id = Py.figure()
     colind = 1
     p = 1
+    p2 = 1
     maxscd = 0.0
-    
+
 
     # # ODE.jl
     rode = resODEfixed[n]
     if length(rode)==0
-        W.closefig(id)
+        Py.close(id)
         continue
     end
     fst = true
@@ -136,17 +102,19 @@ for (n,tc) in totest
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
         if fst
-            p = W.semilogy(scd, wt, "o"*cols[colind])
+            p2 = Py.semilogy(scd, wt, "-o"*cols[colind])
             fst = false
         else
-            p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])
+            p2 = Py.plot(scd, wt, "-o"*cols[colind],hold = true)
+
         end
         make_legend!(leg, res)
         colind +=1
     end
 
-    W.legend(leg)
+    Py.legend(leg)
 
+    #=
     # And again because otherwise legend doesn't work
     # https://github.com/nolta/Winston.jl/issues/198  (TODO)
     # # ODE.jl
@@ -162,12 +130,12 @@ for (n,tc) in totest
         p = W.oplot(scd, wt, "-"*cols[rem1(colind,nc)])
         colind +=1
     end
+    =#
+    Py.title("$n (fixed step)")
+    Py.xlabel("significant digits")
+    Py.ylabel("Walltime (s)")
 
-    W.title("$n (fixed step)")
-    W.xlabel("significant digits")
-    W.ylabel("Walltime (s)")
-           
-    #W.display(p)
-    W.savefig("output/fixedstep-scd-vs-walltime-$n.png")
-    W.closefig(id)
+    Py.display(id)
+    Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
+    Py.close(id)
 end
