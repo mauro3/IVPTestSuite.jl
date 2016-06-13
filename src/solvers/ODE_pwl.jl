@@ -62,6 +62,7 @@ begin
               :(ODE.ode45_dp),
               :(ODE.ode45_fe),
               :(ODE.ode78),
+              :(ODE.ode_ab_adaptive)
               ]
         n = fn.args[2].value
         if fn==:(ODE.ode54)
@@ -76,7 +77,7 @@ begin
     # fixed step non-stiff solvers
     for fn in [:(ODE.ode4),
               #:(ODE.ode4ms),
-#              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
+              :(ODE.ode_imp_ab) #Implicit Adam Bashforth under construction
               ]
         n = fn.args[2].value
         sl = Solver{:ex}(eval(fn), ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
@@ -85,7 +86,8 @@ begin
     end
 
     # adaptive stiff solvers
-    for fn in [:(ODE.ode23s)]
+    for fn in [#:(ODE.ode23s)
+        ]
         n = fn.args[2].value
         fn_str = string(n)
         sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)

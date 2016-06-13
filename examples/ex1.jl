@@ -17,7 +17,7 @@ solver = S.ODEsolvers[ODE.ode78]
 
 # make a TestRun which combines a TestCase with a Solver + some extras:
 ##Example protocol For adaptive solvers
-abstol = 1e-7
+abstol = 1e-10
 reltol = abstol
 dt0 = NaN # size of first step
 tr = TestRunAdapt(tc, solver, Dict{Symbol,Any}(), abstol, reltol, dt0)

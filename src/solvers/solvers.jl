@@ -23,8 +23,8 @@ function nonmod_mass{N,T}(tc::TestCase{N,T})
 end
 
 
-#include("ODE.jl")
-include("ODE_pwl.jl")
+include("ODE.jl")
+#include("ODE_pwl.jl")
 include("DASSL.jl")
 include("Sundials.jl")
 

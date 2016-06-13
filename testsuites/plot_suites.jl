@@ -14,9 +14,7 @@ end
 # significant digits (scd) vs walltime
 for (n,tc) in totest
     leg = AbstractString[]
-    #id = W.figure()
-    id2 = Py.figure()
-    #W.hold(true)
+    id = Py.figure()
     colind = 1
     p = 1
     maxscd = 0.0
@@ -26,8 +24,7 @@ for (n,tc) in totest
     scd = getfield_vec(res, :scd)
     maxscd = max(maxscd, maximum(scd))
     wt = getfield_vec(res, :walltime)
-    #p = W.semilogy(scd, wt, "x"*cols[colind])#
-    p2 = Py.semilogy(scd, wt, "x"*cols[colind])
+    p2 = Py.semilogy(scd, wt, "-x"*cols[colind])
     make_legend!(leg, res)
     colind +=1
 
@@ -41,7 +38,7 @@ for (n,tc) in totest
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
         #p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])#
-        p2 = Py.plot(scd, wt, "o"*cols[rem1(colind,nc)])#
+        p2 = Py.plot(scd, wt, "-o"*cols[rem1(colind,nc)])#
         make_legend!(leg, res)
         colind +=1
     end
@@ -75,7 +72,7 @@ for (n,tc) in totest
 
     #W.display(p)
     Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/scd-vs-walltime-$n.png")
-    Py.close(id2)
+    Py.close(id)
 end
 
 ## Fixed step solvers
@@ -85,7 +82,7 @@ for (n,tc) in totest
 
     leg = AbstractString[]
     #id = W.figure()
-    id2 = Py.figure()
+    id = Py.figure()
     #W.hold(true)
     colind = 1
     p = 1
@@ -96,8 +93,7 @@ for (n,tc) in totest
     # # ODE.jl
     rode = resODEfixed[n]
     if length(rode)==0
-        #W.closefig(id)
-        Py.close(id2)
+        Py.close(id)
         continue
     end
     fst = true
@@ -109,19 +105,16 @@ for (n,tc) in totest
         maxscd = max(maxscd, maximum(scd))
         wt = getfield_vec(res, :walltime)
         if fst
-            #p = W.semilogy(scd, wt, "o"*cols[colind])
-            p2 = Py.semilogy(scd, wt, "o"*cols[colind])
+            p2 = Py.semilogy(scd, wt, "-o"*cols[colind])
             fst = false
         else
-            #p = W.oplot(scd, wt, "o"*cols[rem1(colind,nc)])
-            p2 = Py.plot(scd, wt, "o"*cols[colind],hold = true)
+            p2 = Py.plot(scd, wt, "-o"*cols[colind],hold = true)
 
         end
         make_legend!(leg, res)
         colind +=1
     end
 
-    #W.legend(leg)
     Py.legend(leg)
 
     #=
@@ -147,5 +140,5 @@ for (n,tc) in totest
 
     #W.display(p)
     Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
-    Py.close(id2)
+    Py.close(id)
 end

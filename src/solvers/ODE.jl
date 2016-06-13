@@ -96,7 +96,6 @@ for fn in nonstiff_adaptive
     ODEsolvers[fn] = sl
 end
 
-<<<<<<< c3a03bfae1ad34c2fa900527fbba382e91f4c05a
 # fixed step non-stiff solvers
 for fn in nonstiff_fixedstep
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
@@ -113,19 +112,5 @@ end
 for fn in stiff_fixedstep
     sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
-=======
-    # fixed step stiff solvers
-    for fn in [#:(ODE.ode4s),
-              :(ODE.ode4s_s),
-              :(ODE.ode4s_kr)]
-        n = fn.args[2].value
-        fn_str = string(n)
-        sl = Solver{:im}(eval(fn), ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
-        eval(:($n = sl))
-        push!(ODEsolvers, sl)
-    end
-    append!(allsolvers, ODEsolvers)
-    @show ODEsolvers
->>>>>>> Now PyPlot is implemented in place of Winston!
 end
 merge!(allsolvers, ODEsolvers)

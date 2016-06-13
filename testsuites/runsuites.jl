@@ -5,7 +5,7 @@ import PyPlot
 const Py = PyPlot
 using IVPTestSuite
 
-abstols = 10.0.^(-5:-1:-13)
+abstols = 10.0.^(-5:-1:-10)
 reltols = abstols
 ntsteps = [10.^(1:5); 500_000]
 
@@ -17,6 +17,7 @@ totest = IVPTestSuite.tc_all
 #include("suite_DASSL.jl")
 include("suite_ODE.jl")
 include("suite_ODE_fixedstep.jl")
+
 
 
 ## plot results

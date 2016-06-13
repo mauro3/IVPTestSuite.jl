@@ -17,7 +17,7 @@ for (n,tc) in totest
 
     leg = AbstractString[]
     #id = W.figure()
-    id2 = Py.figure()
+    id = Py.figure()
     #W.hold(true)
     colind = 1
     p = 1
@@ -29,7 +29,7 @@ for (n,tc) in totest
     rode = resODEfixed[n]
     if length(rode)==0
         #W.closefig(id)
-        Py.close(id2)
+        Py.close(id)
         continue
     end
     fst = true
@@ -87,7 +87,7 @@ for (n,tc) in totest
 
     Py.display(p2)
     Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n-pwl.png")
-    Py.close(id2)
+    Py.close(id)
 
   end
 end
