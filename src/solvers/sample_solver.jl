@@ -7,8 +7,6 @@
 # should have it in a @require block but that doesn't currently work
 # https://github.com/one-more-minute/Requires.jl/issues/1
 
-# @require MyOdeSolver begin
-
 function wrapped_solver(tr::TestRun)
     # Wraps the specific MyPkg.mysolver such that it works within
     # IVPTestSuite setup.
@@ -53,5 +51,3 @@ solverpkg = MyPkg
 myodesolver = Solver{typ}(solverfn, solverpkg, wrapped_solver, stiffness, adaptive, daeindex, explicit_eq)
 
 allsolvers[solverfn] = myodesolver
-
-# end # @require MyOdeSolver begin

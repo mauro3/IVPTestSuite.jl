@@ -26,8 +26,5 @@ end
 include("ODE.jl")
 include("DASSL.jl")
 include("Sundials.jl")
-# TODO:
-# - ApproxFun has BDF in ApproxFun.jl/src/Extras/timeevolution.jl
-# - SciPy solvers
 
 end # module
