@@ -15,7 +15,6 @@ rtols = atols
 typealias TestDict Dict{Symbol, Dict{Solver, Float64}}
 tests = TestDict()
 # need at least one entry for each IVPTestSuite.tc_all
-# need at least one entry for each IVPTestSuite.tc_all
 tests[:hires]     = Dict(S.allsolvers[ODE.ode23s] => 3.3206089)
 tests[:vdpol]     = Dict(S.allsolvers[ODE.ode23s] =>  4.610889958728395)
 tests[:threebody] = Dict(S.allsolvers[ODE.ode45_dp]  => 2.3352306868067383) # there was a regression at some point, used to be:  2.6330632171040236)
