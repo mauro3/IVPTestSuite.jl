@@ -38,7 +38,7 @@ plei = let
         for i = 1:N
           for j =1:N
             if i != j
-              setindex!(r,((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2),i,j)
+              r[i,j] = ((y[i] -y[j])^2 + (y[i+N] -y[j+N])^2)^(3/2)
             end
           end
         end
