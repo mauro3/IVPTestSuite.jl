@@ -4,6 +4,24 @@ import Sundials
 
 # note that using a Jacobian is messy in Sundials
 
+# Monkey-patch Sundials v0.2
+# TODO: remove this after a new Sundials.jl version gets tagged
+eval(Sundials, quote
+macro checkflag(ex)
+    # Insert a check that the given function call returns 0,
+    # throw an error otherwise. Only apply directly to function calls.
+    @assert Base.Meta.isexpr(ex, :call)
+    fname = ex.args[1]
+    quote
+        flag = $(esc(ex))
+        if flag != 0
+            error($(string(fname, " failed with error code = ")), flag)
+        end
+        flag
+    end
+end
+end)
+
 
 extraoutputs = 10^6
 const sundialssolvers = Dict{Any,Solver}()
