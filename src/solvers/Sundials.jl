@@ -23,7 +23,7 @@ function wrapper_CVODE_simple{N,T}(tr::TestRun{N,T})
     ###
     # 1) Make call signature
 
-    tsteps = linspace(tc.tspan[1], tc.tspan[2], extraoutputs) # TODO: fix by setting mxstep higher
+    tsteps = collect(linspace(tc.tspan[1], tc.tspan[2], extraoutputs)) # TODO: fix by setting mxstep higher
     args = (tc.fn!, tc.ic, tsteps)
     kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol))
 
@@ -57,7 +57,7 @@ function cvodefun(t::Float64, y::Sundials.N_Vector, yp::Sundials.N_Vector, fn!::
     y = Sundials.asarray(y)
     yp = Sundials.asarray(yp)
     fn!(t, y, yp)
-    return int32(0)
+    return Int32(0)
 end
 
 function wrapper_CVODE{N,T}(tr::TestRun{N,T})
@@ -76,13 +76,17 @@ function wrapper_CVODE{N,T}(tr::TestRun{N,T})
     # 1) Make call signature
 
     mem = Sundials.CVodeCreate(Sundials.CV_BDF, Sundials.CV_NEWTON)
-    flag = Sundials.CVodeInit(mem,
-                              cfunction(cvodefun, Int32, (Sundials.realtype, Sundials.N_Vector, Sundials.N_Vector, Function)),
+    if mem == C_NULL
+        error("Failed to allocate CVODE solver object")
+    end
+
+    flag = Sundials.@checkflag Sundials.CVodeInit(mem,
+                              cfunction(cvodefun, Int32, (Sundials.realtype, Sundials.N_Vector, Sundials.N_Vector, Ref{Function})),
                               tc.tspan[1], Sundials.nvector(tc.ic))
-    flag = Sundials.CVodeSetUserData(mem, tc.fn!)
-    flag = Sundials.CVodeSStolerances(mem, tr.reltol, tr.abstol)
-    flag = Sundials.CVodeSetMaxNumSteps(mem, -1)
-    flag = Sundials.CVDense(mem, tc.dof)
+    flag = Sundials.@checkflag Sundials.CVodeSetUserData(mem, tc.fn!)
+    flag = Sundials.@checkflag Sundials.CVodeSStolerances(mem, tr.reltol, tr.abstol)
+    flag = Sundials.@checkflag Sundials.CVodeSetMaxNumSteps(mem, -1)
+    flag = Sundials.@checkflag Sundials.CVDense(mem, tc.dof)
     y = copy(tc.ic)
     tout = [0.0]
 
@@ -139,7 +143,7 @@ function wrapper_IDA_simple{N,T}(tr::TestRun{N,T})
     # 1) Make call signature
     ic_dydt = tc.fn!()
     tc.fn!(tc.tspan[1], tc.ic, ic_dydt)
-    tsteps = linspace(tc.tspan[1], tc.tspan[2], extraoutputs) # TODO: fix by setting mxstep higher
+    tsteps = collect(linspace(tc.tspan[1], tc.tspan[2], extraoutputs)) # TODO: fix by setting mxstep higher
     args = (residual!, tc.ic, ic_dydt, tsteps)
     kwargs  = ((:reltol, tr.reltol), (:abstol, tr.abstol))
 
@@ -173,7 +177,7 @@ function idasolfun(t::Float64, y::Sundials.N_Vector, yp::Sundials.N_Vector, r::S
     yp = Sundials.asarray(yp)
     r = Sundials.asarray(r)
     userfun(t, y, yp, r)
-    return int32(0)   # indicates normal return
+    return Int32(0)   # indicates normal return
 end
 
 function wrapper_IDA{N,T}(tr::TestRun{N,T})
@@ -205,12 +209,16 @@ function wrapper_IDA{N,T}(tr::TestRun{N,T})
     tc.fn!(tc.tspan[1], tc.ic, ic_dydt)
 
     mem = Sundials.IDACreate()
-    flag = Sundials.IDAInit(mem, cfunction(idasolfun, Int32, (Sundials.realtype, Sundials.N_Vector, Sundials.N_Vector, Sundials.N_Vector, Function)),
+    if mem == C_NULL
+        error("Failed to allocate CVODE solver object")
+    end
+
+    flag = Sundials.@checkflag Sundials.IDAInit(mem, cfunction(idasolfun, Int32, (Sundials.realtype, Sundials.N_Vector, Sundials.N_Vector, Sundials.N_Vector, Ref{Function})),
                             tc.tspan[1], Sundials.nvector(tc.ic), Sundials.nvector(ic_dydt))
-    flag = Sundials.IDASetUserData(mem, residual!)
-    flag = Sundials.IDASStolerances(mem, tr.reltol, tr.abstol)
-    flag = Sundials.IDADense(mem, tc.dof)
-    flag = Sundials.IDASetMaxNumSteps(mem, -1)
+    flag = Sundials.@checkflag Sundials.IDASetUserData(mem, residual!)
+    flag = Sundials.@checkflag Sundials.IDASStolerances(mem, tr.reltol, tr.abstol)
+    flag = Sundials.@checkflag Sundials.IDADense(mem, tc.dof)
+    flag = Sundials.@checkflag Sundials.IDASetMaxNumSteps(mem, -1)
 
     rtest = zeros(T, tc.dof)
     residual!(tc.tspan[1], tc.ic, ic_dydt, rtest)

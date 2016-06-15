@@ -13,11 +13,15 @@ tc = IVPTestSuite.tc_all[tc_name]
 
 # Pick a solver.  S.allsolvers is the list of all solvers.  Generally
 # each family of solvers also has a list.
-solver = S.ODEsolvers[ODE.ode78]
+solver = S.allsolvers[[ODE.ode78,
+                       Sundials.CVode,
+                       Sundials.IDASolve,
+                       DASSL.dasslSolve][3]
+                      ]
 
 # make a TestRun which combines a TestCase with a Solver + some extras:
 ##Example protocol For adaptive solvers
-abstol = 1e-7
+abstol = 1e-12
 reltol = abstol
 dt0 = NaN # size of first step
 tr = TestRunAdapt(tc, solver, Dict{Symbol,Any}(), abstol, reltol, dt0)

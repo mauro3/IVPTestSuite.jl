@@ -228,7 +228,7 @@ function Base.show( io::IO, res::TestResults)
     tc = res.testrun.tc
     so = res.testrun.solver
     scd = round(res.scd, 3)
-    wt = round(res.walltime, 3)
+    wt = round(res.walltime*1000, 3)
     mb = round(res.mem/1e6, 3)
     trdetails = _show(tr)
     print(io,
@@ -237,7 +237,7 @@ function Base.show( io::IO, res::TestResults)
           $trdetails
 
           Significant digits: $(scd)
-          Walltime:           $wt s
+          Walltime:           $wt ms
           Memory allocated:   $mb MB
           """)
 
