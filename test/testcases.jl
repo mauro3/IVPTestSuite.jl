@@ -1,6 +1,5 @@
 # Running all testcases and checking their performance
 
-#using Compat
 using ODE
 using DASSL
 const S = Solvers
