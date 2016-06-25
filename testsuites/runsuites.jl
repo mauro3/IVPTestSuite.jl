@@ -29,15 +29,19 @@ ntsteps = vcat(collect(10.^(1:5)), 500_000)
 ## The best way to exclude specific solvers or include solvers not included
 ## in release version of a given package, is to comment it out or include it in
 ## the dictionary of allsolvers (see src/solvers)
+
+## change the below
+@show test_ODEsolvers = S.ODEsolvers
+@show test_sundialsolvers = sundialssolvers
 ################################################################################
 ## Include suite to be run
 ################################################################################
-include("suite_Sundials.jl")
-include("suite_DASSL.jl")
-include("suite_ODE_adaptive.jl")
-include("suite_ODE_fixedstep.jl")
+#include("suite_Sundials.jl")
+#include("suite_DASSL.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_adaptive.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_fixedstep.jl")
 
 ################################################################################
 ## Plot results
 ################################################################################
-include("plot_suites.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/plot_suites.jl")
