@@ -82,4 +82,4 @@ function plottestsuite()
   include(Pkg.dir()*"/IVPTestSuite/testsuites/plot_suites.jl")
 end
 
-plottests()
+plottestsuite()
