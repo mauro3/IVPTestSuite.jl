@@ -55,7 +55,7 @@ import ODE
 ## Non-stiff fixed step solvers
 nonstiff_fixedstep= [
            ODE.ode1,
-           ODE.ode2_midpoint,
+#          ODE.ode2_midpoint,# add back in after 8 color issues is resolved
            ODE.ode2_heun,
            ODE.ode4,
            ODE.ode4ms,
