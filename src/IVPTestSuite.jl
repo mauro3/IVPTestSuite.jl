@@ -16,6 +16,9 @@ end
 
 using Requires
 
+# terminal line commands
+export runtestsuite, plottestsuite
+
 # modules
 export Solvers
 # variables
