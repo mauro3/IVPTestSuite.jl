@@ -16,9 +16,6 @@ end
 
 using Requires
 
-# terminal line commands
-export runtestsuite, plottestsuite
-
 # modules
 export Solvers
 # variables
@@ -267,5 +264,10 @@ include("testcases/testcases.jl")
 
 ## Plotting
 @require PyPlot include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
+
+## solvers functions
+include("testsuites/runsuites.jl")
+# terminal line commands
+export runtestsuite, plottestsuite
 
 end # module

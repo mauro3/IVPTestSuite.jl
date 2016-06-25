@@ -4,7 +4,7 @@
 
 import PyPlot
 const Py = PyPlot
-using IVPTestSuite
+#using IVPTestSuite
 
 ################################################################################
 ## Exclude specific solvers
@@ -74,7 +74,7 @@ function runtestsuite(;ODE_solverfns = Solvers.ODE_solverfns,
     runsuite_ODEfixed(test_ODEsolvers,totest,ntsteps)
 end
 
-runtestsuite(ODE_solverfns = [ODE.ode1],sundial_solverfns= [],DASSL_solverfns = [])
+#runtestsuite(ODE_solverfns = [ODE.ode1],sundial_solverfns= [],DASSL_solverfns = [])
 ################################################################################
 ## Plot results
 ################################################################################
@@ -82,4 +82,4 @@ function plottestsuite()
   include(Pkg.dir()*"/IVPTestSuite/testsuites/plot_suites.jl")
 end
 
-plottestsuite()
+#plottestsuite()
