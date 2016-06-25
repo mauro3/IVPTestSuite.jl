@@ -27,4 +27,9 @@ include("ODE.jl")
 include("DASSL.jl")
 include("Sundials.jl")
 
+
+ODE_solverfns = [solverfn for solverfn in keys(ODEsolvers)]
+sundial_solverfns = [solverfn for solverfn in keys(sundialssolvers)]
+DASSL_solverfns = [solverfn for solverfn in keys(DASSLsolvers)]
+
 end # module
