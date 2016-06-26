@@ -269,9 +269,3 @@ include(Pkg.dir()*"/IVPTestSuite/testsuites/runsuites.jl")
 @require PyPlot include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
 
 end # module
-
-using IVPTestSuite.Solvers
-using IVPTestSuite.QuickSuites
-using ODE
-runtestsuite(ODEsolverfns=[ODE.ode1], sundialsolverfns = [], DASSLsolverfns = [])
-# which is the same as runtestsuite(ODEsolverfns=[ODE.ode1]), because the last two default to an empty array
