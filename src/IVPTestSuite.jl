@@ -274,6 +274,6 @@ include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_ODE_fixedstep.jl")
 include(Pkg.dir()*"/IVPTestSuite/testsuites/plotsuites.jl")
 
 # terminal line commands
-export runtestsuite, plottestsuite
+export runtestsuite, plottestsuite, runsuite_sundials, runsuite_ODEadaptive, runsuite_ODEfixed
 
 end # module
