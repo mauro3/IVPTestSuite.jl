@@ -57,10 +57,10 @@ function runtestsuite(;ODE_solverfns = Solvers.ODE_solverfns,
         test_ODEsolvers[solverfn] = Solvers.ODEsolvers[solverfn]
     end
     for solverfn in sundial_solverfns
-        test_sundialsolvers[solverfn] = Solvers.ODEsolvers[solverfn]
+        test_sundialsolvers[solverfn] = Solvers.sundial_solverfns[solverfn]
     end
     for solverfn in DASSL_solverfns
-        test_DASSLsolvers[solverfn] = Solvers.ODEsolvers[solverfn]
+        test_DASSLsolvers[solverfn] = Solvers.DASSL_solverfns[solverfn]
     end
 
     include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_Sundials.jl")
