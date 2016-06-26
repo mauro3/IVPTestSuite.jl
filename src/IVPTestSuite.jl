@@ -265,8 +265,14 @@ include("testcases/testcases.jl")
 ## Plotting
 @require PyPlot include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
 
-## solvers functions
+## test suite files
 include(Pkg.dir()*"/IVPTestSuite/testsuites/runsuites.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_Sundials.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_DASSL.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_ODE_adaptive.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_ODE_fixedstep.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/plotsuites.jl")
+
 # terminal line commands
 export runtestsuite, plottestsuite
 

@@ -63,11 +63,6 @@ function runtestsuite(;ODE_solverfns = Solvers.ODE_solverfns,
         test_DASSLsolvers[solverfn] = Solvers.DASSL_solverfns[solverfn]
     end
 
-    include("suite_Sundials.jl")
-    include("suite_DASSL.jl")
-    include("suite_ODE_adaptive.jl")
-    include("suite_ODE_fixedstep.jl")
-
     runsuite_sundials(test_sundialsolvers,totest, abstols, reltols)
     runsuite_DASSL(test_DASSLsolvers,totest, abstols, reltols)
     runsuite_ODEadaptive(test_ODEsolvers,totest, abstols, reltols)
@@ -78,8 +73,4 @@ end
 ################################################################################
 ## Plot results
 ################################################################################
-function plottestsuite()
-  include(Pkg.dir()*"/IVPTestSuite/testsuites/plot_suites.jl")
-end
-
 #plottestsuite()
