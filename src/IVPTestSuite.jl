@@ -17,7 +17,7 @@ end
 using Requires
 
 # modules
-export Solvers
+export Solvers, QuickSuites
 # variables
 export nonstiff, mildlystiff, stiff, explicit_eq, explicit_mass_eq, implicit_eq #, imex_eq
 # types
@@ -262,18 +262,16 @@ include("eval_tests.jl")
 ## The test cases
 include("testcases/testcases.jl")
 
+## The test cases
+include(Pkg.dir()*"/IVPTestSuite/testsuites/runsuites.jl")
+
 ## Plotting
 @require PyPlot include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
 
-## test suite files
-include(Pkg.dir()*"/IVPTestSuite/testsuites/runsuites.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_Sundials.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuites.suite_DASSL.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_adaptive.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_fixedstep.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuites/plotsuites.jl")
-
-# terminal line commands
-export runtestsuite, plottestsuite, runsuite_sundials, runsuite_ODEadaptive, runsuite_ODEfixed
-
 end # module
+
+using IVPTestSuite.Solvers
+using IVPTestSuite.QuickSuites
+using ODE
+runtestsuite(ODEsolverfns=[ODE.ode1], sundialsolverfns = [], DASSLsolverfns = [])
+# which is the same as runtestsuite(ODEsolverfns=[ODE.ode1]), because the last two default to an empty array
