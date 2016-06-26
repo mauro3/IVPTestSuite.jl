@@ -267,10 +267,10 @@ include("testcases/testcases.jl")
 
 ## test suite files
 include(Pkg.dir()*"/IVPTestSuite/testsuites/runsuites.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_Sundials.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_DASSL.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_ODE_adaptive.jl")
-include(Pkg.dir()*"/IVPTestSuite/testsuitessuite_ODE_fixedstep.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_Sundials.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites.suite_DASSL.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_adaptive.jl")
+include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_fixedstep.jl")
 include(Pkg.dir()*"/IVPTestSuite/testsuites/plotsuites.jl")
 
 # terminal line commands
