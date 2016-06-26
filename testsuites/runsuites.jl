@@ -63,10 +63,10 @@ function runtestsuite(;ODE_solverfns = Solvers.ODE_solverfns,
         test_DASSLsolvers[solverfn] = Solvers.DASSL_solverfns[solverfn]
     end
 
-    include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_Sundials.jl")
-    include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_DASSL.jl")
-    include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_adaptive.jl")
-    include(Pkg.dir()*"/IVPTestSuite/testsuites/suite_ODE_fixedstep.jl")
+    include("suite_Sundials.jl")
+    include("suite_DASSL.jl")
+    include("suite_ODE_adaptive.jl")
+    include("suite_ODE_fixedstep.jl")
 
     runsuite_sundials(test_sundialsolvers,totest, abstols, reltols)
     runsuite_DASSL(test_DASSLsolvers,totest, abstols, reltols)
