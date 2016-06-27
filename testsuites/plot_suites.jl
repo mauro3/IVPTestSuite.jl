@@ -1,6 +1,7 @@
 # plots the suites ran with runsuites.jl and saves plots to output/
 function plottestsuite()
     #TODO: Use ColorMaps to get arbritary number of well spaced colors
+    print("Good so far")
     cols = split("ymcrgbk","")
     push!(cols, )
     nc = length(cols)
@@ -21,7 +22,7 @@ function plottestsuite()
         maxscd = 0.0
 
         # DASSL.jl
-        if isdefined(:resDASSL)
+        if !isempty(QuickSuites.resDASSL)
             res = resDASSL[n]
             scd = getfield_vec(res, :scd)
             maxscd = max(maxscd, maximum(scd))
@@ -32,7 +33,7 @@ function plottestsuite()
         end
 
         # ODE.jl
-        if isdefined(:resODE)
+        if !isempty(QuickSuites.resODE)
             rode = resODE[n]
             for (s,res) in rode
                 scd = getfield_vec(res, :scd)
@@ -48,7 +49,7 @@ function plottestsuite()
         end
 
         #Sundials
-        if isdefined(:resSun)
+        if !isempty(QuickSuites.resSun)
             rsun = resSun[n]
             for (s,res) in rsun
                 scd = getfield_vec(res, :scd)
@@ -79,7 +80,7 @@ function plottestsuite()
 
     ## Fixed step solvers
     # significant digits (scd) vs walltime
-    if isdefined(:resODEfixed)
+    if !isempty(QuickSuites.resODEfixed)
         for (n,tc) in totest
 
             leg = AbstractString[]

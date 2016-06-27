@@ -1,6 +1,3 @@
-resODEfixed = Dict{Symbol,Dict}()
-const S = Solvers
-
 function runsuite_ODEfixed(test_ODEsolvers,totest,ntsteps)
     for (n,tc) in totest
         res = Dict{Solver,Any}()

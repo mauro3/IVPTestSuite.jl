@@ -1,7 +1,4 @@
 # this eats memory
-resSun = Dict{Symbol,Dict}()
-const S = Solvers
-
 function runsuite_sundials(test_sundialsolvers,totest,abstols, reltols)
     for (n,tc) in totest
         res = Dict{Solver,Any}()

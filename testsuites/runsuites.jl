@@ -25,6 +25,11 @@ module QuickSuites
     ################################################################################
     ## Main function for running suite from Julia Terminal
     ################################################################################
+    resODE = Dict{Symbol,Dict}()
+    resODEfixed = Dict{Symbol,Dict}()
+    resSun = Dict{Symbol,Dict}()
+    resDASSL = Dict{Symbol,Any}()
+
     runalltestsuites(; abstols = 10.0.^(-5:-1:-10),
                                 reltols = abstols,
                                 ntsteps = vcat(collect(10.^(1:5)), 500_000),
@@ -81,10 +86,15 @@ module QuickSuites
             test_DASSLsolvers[solverfn] = Solvers.DASSLsolvers[solverfn]
         end
 
-        runsuite_sundials(test_sundialsolvers,totest, abstols, reltols)
-        runsuite_DASSL(test_DASSLsolvers,totest, abstols, reltols)
-        runsuite_ODEadaptive(test_ODEsolvers,totest, abstols, reltols)
-        runsuite_ODEfixed(test_ODEsolvers,totest,ntsteps)
+        resODE = Dict{Symbol,Dict}()
+        resODEfixed = Dict{Symbol,Dict}()
+        resSun = Dict{Symbol,Dict}()
+        resDASSL = Dict{Symbol,Any}()
+
+        resSun = runsuite_sundials(test_sundialsolvers,totest, abstols, reltols)
+        resDASSL = runsuite_DASSL(test_DASSLsolvers,totest, abstols, reltols)
+        resODE = runsuite_ODEadaptive(test_ODEsolvers,totest, abstols, reltols)
+        resODEfixed = runsuite_ODEfixed(test_ODEsolvers,totest,ntsteps)
     end
 
     # Example run

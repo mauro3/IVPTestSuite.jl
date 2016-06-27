@@ -1,5 +1,3 @@
-resDASSL = Dict{Symbol,Any}()
-
 function runsuite_DASSL(test_DASSLsolvers,totest,abstols, reltols)
 #dassl = IVPTestSuite.Solvers.allsolvers[DASSL.dasslSolve]
     for (solverfn,solver) in test_DASSLsolvers
