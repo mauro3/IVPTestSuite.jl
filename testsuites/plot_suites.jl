@@ -1,5 +1,5 @@
 # plots the suites ran with runsuites.jl and saves plots to output/
-function plottestsuite()
+function plottestsuite(;totest = IVPTestSuite.tc_all)
     #TODO: Use ColorMaps to get arbritary number of well spaced colors
     print("Good so far")
     cols = split("ymcrgbk","")
@@ -14,7 +14,7 @@ function plottestsuite()
 
     ## Adaptive steppers
     # significant digits (scd) vs walltime
-    for (n,tc) in QuickSuites.totest
+    for (n,tc) in totest
         leg = AbstractString[]
         id = Py.figure(figsize=(50,50),dpi=130)
         colind = 1
@@ -81,7 +81,7 @@ function plottestsuite()
     ## Fixed step solvers
     # significant digits (scd) vs walltime
     if !isempty(QuickSuites.resODEfixed)
-        for (n,tc) in QuickSuites.totest
+        for (n,tc) in totest
 
             leg = AbstractString[]
             id = Py.figure(figsize=(50,50),dpi=130)
