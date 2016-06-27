@@ -14,7 +14,7 @@ function plottestsuite()
 
     ## Adaptive steppers
     # significant digits (scd) vs walltime
-    for (n,tc) in totest
+    for (n,tc) in QuickSuites.totest
         leg = AbstractString[]
         id = Py.figure(figsize=(50,50),dpi=130)
         colind = 1
@@ -81,7 +81,7 @@ function plottestsuite()
     ## Fixed step solvers
     # significant digits (scd) vs walltime
     if !isempty(QuickSuites.resODEfixed)
-        for (n,tc) in totest
+        for (n,tc) in QuickSuites.totest
 
             leg = AbstractString[]
             id = Py.figure(figsize=(50,50),dpi=130)
