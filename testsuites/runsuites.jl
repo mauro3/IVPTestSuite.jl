@@ -10,6 +10,7 @@ module QuickSuites
 
     # terminal line commands
     export runtestsuite, runalltestsuites, plottestsuite, runsuite_sundials, runsuite_ODEadaptive, runsuite_ODEfixed
+    totest = IVPTestSuite.tc_all
 
 
     ################################################################################
