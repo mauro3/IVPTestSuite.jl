@@ -87,7 +87,7 @@ module QuickSuites
     end
 
     # Example run
-    # runtestsuite(ODE_solverfns = [ODE.ode1,ODE.ode23s],sundial_solverfns= [],DASSL_solverfns = [])
+    # runtestsuite(ODEsolverfns = [ODE.ode1,ODE.ode23s],sundialsolverfns= [],DASSLsolverfns = [])
 
     ################################################################################
     ## Plot results with plottestsuite() defined in following file
