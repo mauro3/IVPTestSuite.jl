@@ -22,12 +22,14 @@ function ODEjl_wrapper(tr::TestRun)
             kwargs  = ((:jacobian, jac), kwargs...)
         end
     else
-        args = (fn, tc.ic, tr.tsteps)
+        args = (fn, tc.ic, tc.tspan)
+        initstep = tr.tsteps[2]-tr.tsteps[1]
         if hasjacobian(tc) && isimplicit(tr.solver)
-            kwargs  = ((:jacobian, jac),)
+            kwargs  = ((:jac!, jac), (:initstep, initstep), (:points, :specified))
         else
-            kwargs  = ()
+            kwargs  = ((:initstep, initstep), (:points, :specified))
         end
+    
     end
 
     ###
