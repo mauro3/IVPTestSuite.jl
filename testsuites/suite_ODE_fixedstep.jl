@@ -1,6 +1,5 @@
 resODEfixed = Dict{Symbol,Dict}()
-const S = Solvers
-
+#const S = Solvers
 for (n,tc) in totest
     res = Dict{Solver,Any}()
     tstepss = [linspace(tc.tspan[1], tc.tspan[2], n) for n in ntsteps]

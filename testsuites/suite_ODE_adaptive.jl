@@ -1,5 +1,5 @@
 resODE = Dict{Symbol,Dict}()
-const S = Solvers
+#const S = Solvers
 
 for (n,tc) in totest
     res = Dict{Solver,Any}()
