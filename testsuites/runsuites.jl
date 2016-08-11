@@ -9,7 +9,7 @@ using IVPTestSuite
 ################################################################################
 ## Select test cases to use
 ################################################################################
-totest = IVPTestSuite.tc_all
+# totest = IVPTestSuite.tc_all
 # totest = similar(totest)
 # totest[:plei] = IVPTestSuite.tc_all[:plei]
 
@@ -17,11 +17,11 @@ totest = IVPTestSuite.tc_all
 ## Set Tolerancs and step sizes for tests
 ################################################################################
 # For adaptive solvers
-abstols = 10.0.^(-5:-1:-10)
-reltols = abstols
+#abstols = 10.0.^(-5:-1:-10)
+#reltols = abstols
 
 # For fixed step solvers
-ntsteps = vcat(collect(10.^(1:5)), 500_000)
+#ntsteps = vcat(collect(10.^(1:5)), 500_000)
 
 ################################################################################
 ## Exclude specific solvers
@@ -40,4 +40,4 @@ include("suite_ODE_fixedstep.jl")
 ################################################################################
 ## Plot results
 ################################################################################
-include("plot_suites.jl")
+#include("plot_suites.jl")

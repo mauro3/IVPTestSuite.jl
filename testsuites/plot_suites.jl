@@ -21,7 +21,7 @@ for (n,tc) in totest
     maxscd = 0.0
 
     # DASSL.jl
-    if isdefined(:resDASSL)
+    if haskey(resDASSL,n)
         res = resDASSL[n]
         scd = getfield_vec(res, :scd)
         maxscd = max(maxscd, maximum(scd))
@@ -32,7 +32,7 @@ for (n,tc) in totest
     end
 
     # ODE.jl
-    if isdefined(:resODE)
+    if haskey(resODE,n)
         rode = resODE[n]
         for (s,res) in rode
             scd = getfield_vec(res, :scd)
@@ -48,7 +48,7 @@ for (n,tc) in totest
     end
 
     #Sundials
-    if isdefined(:resSun)
+    if haskey(resSun,n)
         rsun = resSun[n]
         for (s,res) in rsun
             scd = getfield_vec(res, :scd)
@@ -81,47 +81,48 @@ end
 # significant digits (scd) vs walltime
 if isdefined(:resODEfixed)
     for (n,tc) in totest
+        if haskey(resODEfixed,n)
+            leg = AbstractString[]
+            id2 = Py.figure(figsize=(50,50),dpi=130)
+            colind = 1
+            p = 1
+            p2 = 1
+            maxscd = 0.0
 
-        leg = AbstractString[]
-        id = Py.figure(figsize=(50,50),dpi=130)
-        colind = 1
-        p = 1
-        p2 = 1
-        maxscd = 0.0
 
-
-        # # ODE.jl
-        rode = resODEfixed[n]
-        if length(rode)==0
-            Py.close(id)
-            continue
-        end
-        fst = true
-        for (s,res) in rode
-            scd = getfield_vec(res, :scd)
-            if all(isnan(scd))
+            # # ODE.jl
+            rode = resODEfixed[n]
+            if length(rode)==0
+                Py.close(id2)
                 continue
             end
-            maxscd = max(maxscd, maximum(scd))
-            wt = getfield_vec(res, :walltime)
-            if fst
-                p2 = Py.semilogy(scd, wt, "-o"*cols[colind])
-                fst = false
-            else
-                p2 = Py.plot(scd, wt, "-o"*cols[colind],hold = true)
+            fst = true
+            for (s,res) in rode
+                scd = getfield_vec(res, :scd)
+                if all(isnan(scd))
+                    continue
+                end
+                maxscd = max(maxscd, maximum(scd))
+                wt = getfield_vec(res, :walltime)
+                if fst
+                    p2 = Py.semilogy(scd, wt, "-o"*cols[colind])
+                    fst = false
+                else
+                    p2 = Py.plot(scd, wt, "-o"*cols[colind],hold = true)
 
+                end
+                make_legend!(leg, res)
+                colind +=1
             end
-            make_legend!(leg, res)
-            colind +=1
+
+            Py.legend(leg)
+            Py.title("$n (fixed step)")
+            Py.xlabel("significant digits")
+            Py.ylabel("Walltime (s)")
+            println("Ave Maria")
+            Py.display(id2)
+            Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
+            #Py.close(id)
         end
-
-        Py.legend(leg)
-        Py.title("$n (fixed step)")
-        Py.xlabel("significant digits")
-        Py.ylabel("Walltime (s)")
-
-        Py.display(id)
-        Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
-        #Py.close(id)
     end
 end
