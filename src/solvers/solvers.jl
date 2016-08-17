@@ -27,4 +27,9 @@ include("ODE.jl")
 include("DASSL.jl")
 include("Sundials.jl")
 
+
+ODEsolverfns = Function[solverfn for solverfn in keys(ODEsolvers)]
+sundialsolverfns = Function[solverfn for solverfn in keys(sundialssolvers)]
+DASSLsolverfns = Function[solverfn for solverfn in keys(DASSLsolvers)]
+
 end # module

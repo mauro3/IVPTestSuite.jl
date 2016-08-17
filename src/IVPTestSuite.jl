@@ -17,7 +17,7 @@ end
 using Requires
 
 # modules
-export Solvers
+export Solvers, QuickSuites
 # variables
 export nonstiff, mildlystiff, stiff, explicit_eq, explicit_mass_eq, implicit_eq #, imex_eq
 # types
@@ -261,6 +261,9 @@ include("eval_tests.jl")
 
 ## The test cases
 include("testcases/testcases.jl")
+
+## The test cases
+include(Pkg.dir()*"/IVPTestSuite/testsuites/runsuites.jl")
 
 ## Plotting
 @require PyPlot include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
