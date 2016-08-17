@@ -59,8 +59,8 @@ nonstiff_fixedstep= [
            ODE.ode2_heun,
            ODE.ode4,
            ODE.ode4ms,
-           ODE.ode5ms
-#          ODE.ode113 Adam Bashforth under construction
+           ODE.ode5ms,
+           ODE.ode4am #Adam Bashforth under construction
            ]
 ## Non-stiff adaptive step solvers
 nonstiff_adaptive=[
@@ -70,7 +70,7 @@ nonstiff_adaptive=[
            ODE.ode45_dp,
            ODE.ode45_fe,
            ODE.ode78,
-#          ODE.ode_ab_adaptive #Adaptive Adam Bashforth under construction
+           ODE.ode113 #Adaptive Adam Bashforth under construction
            ]
 ## Stiff fixed-step solvers
 stiff_fixedstep=[

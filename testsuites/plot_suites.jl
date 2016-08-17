@@ -14,8 +14,9 @@ end
 ## Adaptive steppers
 # significant digits (scd) vs walltime
 for (n,tc) in totest
+    #id = Py.figure(figsize=(50,50),dpi=130)
     leg = AbstractString[]
-    id = Py.figure(figsize=(50,50),dpi=130)
+    id = Py.figure()
     colind = 1
     p = 1
     maxscd = 0.0
@@ -63,7 +64,6 @@ for (n,tc) in totest
             colind +=1
         end
     end
-
     if colind==1
         Py.close(id) # no plots were made
     else
@@ -77,13 +77,15 @@ for (n,tc) in totest
     end
 end
 
+
+
 ## Fixed step solvers
 # significant digits (scd) vs walltime
 if isdefined(:resODEfixed)
     for (n,tc) in totest
         if haskey(resODEfixed,n)
             leg = AbstractString[]
-            id2 = Py.figure(figsize=(50,50),dpi=130)
+            id2 = Py.figure(dpi=130)
             colind = 1
             p = 1
             p2 = 1
@@ -114,15 +116,13 @@ if isdefined(:resODEfixed)
                 make_legend!(leg, res)
                 colind +=1
             end
-
-            Py.legend(leg)
-            Py.title("$n (fixed step)")
-            Py.xlabel("significant digits")
-            Py.ylabel("Walltime (s)")
-            println("Ave Maria")
-            Py.display(id2)
-            Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
-            #Py.close(id)
         end
+        Py.legend(leg)
+        Py.title("$n (fixed step)")
+        Py.xlabel("significant digits")
+        Py.ylabel("Walltime (s)")
+        Py.display(id2)
+        Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
+        #Py.close(id2)
     end
 end
