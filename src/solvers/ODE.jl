@@ -70,7 +70,7 @@ nonstiff_adaptive=[
            ODE.ode45_dp,
            ODE.ode45_fe,
            ODE.ode78,
-#          ODE.ode_ab_adaptive #Adaptive Adam Bashforth under construction
+           ODE.ode113 #Adaptive Adam Bashforth under construction
            ]
 ## Stiff fixed-step solvers
 stiff_fixedstep=[
