@@ -27,7 +27,10 @@ function run_ode_test_throwerror{Name}(tr::TestRun{Name})
         return nothing
     end
     gc()
+
+    #TODO: Add a time out option
     out, walltime, mem, gc_time = @timed tr.solver.wrapper(tr)
+    
     tend, yend, stats = out
     return simple_eval(tend, yend, stats, walltime, mem, gc_time, tr)
 end
@@ -54,6 +57,7 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
         if verbose
             print("Running test $i of $tot:")
         end
+        # TODO: add something to time out here if too long
         push!(out, run_fn(tr; verbose=verbose))
         if verbose
             sd = out[end].scd
