@@ -137,6 +137,63 @@ Running test 6 of 6: sig. digits= 6.075275133643523, walltime= 0.016467959s, mem
 
 Note that errors are caught, ignored and the next test is run.
 
+### Running suites using Benchmarker module
+
+The Benchmarker module was intended to for users who would like to run quick
+test suites of certain solvers against certain test cases.
+
+First, one must load the module
+
+```
+include(joinpath(Pkg.dir(),"IVPTestSuite\\testsuites\\runsuites.jl"))
+using Benchmarker
+```
+
+Next, there are two ways of running the suites.
+
+First, is to configure the testsuite with variable which will enable you to quickly
+edit the suite and rerun with different figures. Four variables are necessary to
+run a test: one which holds the solvers to test, on which holds the cases to test,
+one which holds the tolerances to test, and one which holds the number of time steps
+to test with. To select the solvers, simply store the list of solvers in a array,
+like any of the following examples:
+```
+solvers = [ODE.ode45]
+solvers = [ODE.ode78, Sundials.cvode]
+solvers = allsolvers
+```
+To select the test cases, use the the `selectcases()` functions as follows:
+
+```
+cases = selectcases(:all)
+cases = selectcases(:plei)
+cases = selectcases(:hires,:vdpol)
+```
+As for the tolerance and time step ranges, simply set these values to desired quantities:
+
+```
+ntsteps = vcat(collect(10.^(1:5)), 500_000)
+abstol = 10.0.^(-5:-1:-11)
+```
+Now it is time to run this configured suite:
+
+```
+runsuites(solvers,cases,abstol,ntsteps)
+```
+The results can be easily plotted by calling
+```
+plotsuites()
+```
+The second way to use Benchmarker is to also call `Benchmarker.runsuites()` function,
+but a version which instead takes as optional keyword arguments `testsolvers`,
+ `testcases`, `testabstol`, `testntsteps`. This way is thus quicker than the first.
+If these are not set, they will default to testing all solvers, all cases,
+and respectively. A example call looks like the following:
+```
+runsuites(testsolvers=[ODE.ode78,Sundials.IDASolve], testcases=selectcases(:plei,:hires))
+plotsuites()
+```
+
 ### Implementing new test-cases
 
 When implementing a new test case a new instance of
@@ -149,7 +206,7 @@ and the already implemented test cases in
 # create an instance of TestCaseExplicit:
 mytest = let
     tcname = ...::Symbol # name should be same as variable name (except for upper/lower case)
-    
+
     T = ... # the datatype used, probably Float64
     Tarr = [Matrix, SparseMatrixCSC][1] # the container datatype used
                                         # for the Jacobian and mass
@@ -170,7 +227,7 @@ mytest = let
     end
     # initializes storage for y:
     fn!( ; T_::Type=T, dof_=dof) = zeros(T_,dof_)
- 
+
     # NOTE, using keyword arguments more intuitively like:
     # fn!( ; T::Type=T, dof=dof) = zeros(T,dof)
     # does not work: https://github.com/JuliaLang/julia/issues/9948
@@ -202,7 +259,7 @@ mytest = let
     # Returns a matrix which can hold the mass matrix.
     # Can also be used to make a Matlab-style MvPattern matrix with mass!(Bool)
     mass!( ; T_::Type=T, dof_=dof) = zeros(T_,dof_,dof_)  # if the problem is large better return an appropriate sparse matrix
-    
+
     ic = T[...] # vector of initial conditions
     tspan = T[start, stop] # integration interval
     refsol = T[...] # reference solution at tspan[2]
@@ -210,11 +267,11 @@ mytest = let
     refsolinds = trues(dof)   # if refsol does not contain all indices
                               # then specify which indices of the
                               # solution are to be compared to refsol
-    
+
     scd_absinds = Int[]       # set where refsol is very small or
                               # zero. To avoid it dominating the
                               # relative error
-    
+
     tc = TestCaseExplicit{tcname, T, Tarr}(
                              stiffness,
                              dae,
@@ -254,19 +311,19 @@ function wrapped_solver(tr::TestRun)
     so = tr.solver
     ###
     # 0) Wrap tc.fn!, tc.jac!, tc.mass! if necessary
-    
+
     ###
     # 1) Make call signature
 
     args = ...
     kwargs = ...
-    
+
     ###
     # 2) Call solver, if it does not succeed throw an error (if that
     # is not done anyway)
     out = so.solverfn(args...; kwargs...)  
     # (probably no need to modify this section)
-    
+
     ###
     # 3) Transform output to conform to standard:
     # tend -- end time reached
@@ -276,9 +333,9 @@ function wrapped_solver(tr::TestRun)
     ...
     return tend, yend, stats
 end
-    
+
 solverfn = ...::Function # the actual solver function, for example ODE.ode23s.
-# choose from 
+# choose from
 typ =  [:ex, :im, :imex][2]                    # Typ: :ex (explicit method), :im (implicit method), :imex (IMEX method)
 stiffness = [nonstiff, mildlystiff, stiff][1]  # stiff, mildly stiff or non-stiff solver
 adaptive = [true, false][1]                    # is the solver adaptive
@@ -303,4 +360,3 @@ were copied from
 [OdePkg](http://octave.sourceforge.net/odepkg/overview.html).  If
 someone would prefer a MIT/BSD licence, just re-implement the OdePkg
 derived files and I will update the licence.
- 
