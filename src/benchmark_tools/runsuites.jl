@@ -15,23 +15,23 @@
 #      Ex: `solvers = [ODE.ode78, Sundials.cvode]`
 #
 #  4 - Run configured test
-#      Ex: `runsuites()`
-#      Ex: `runsuites(testcases=cases, testntsteps = ntsteps)`
+#      Ex: `runsuite()`
+#      Ex: `runsuite(testcases=cases, testntsteps = ntsteps)`
 #
 #  5 - Plot the results
-#      Ex: `plotsuites()`
+#      Ex: `plotsuite()`
 ###############################################################################
 
 # functions for running a configured test suite
 "
-runsuites(;testsolvers,testcases,testabstol,testntsteps)
+runsuite(;testsolvers,testcases,testabstol,testntsteps)
 
 function for easily running test suite scripts
 "
-function runsuites(;testsolvers = [all],
+function runsuite(;testsolvers::Array{Function,1} = [all],
                                 testcases = :all,
-                                abstols = 10.0.^(-5:-1:-10),
-                                ntsteps = vcat(collect(10.^(1:5)), 500_000))
+                                testabstols = 10.0.^(-5:-1:-10),
+                                testntsteps = vcat(collect(10.^(1:5)), 500_000))
 
     # test all solvers is option is chosen
     if testsolvers == [all]
@@ -54,26 +54,33 @@ function runsuites(;testsolvers = [all],
                             Solvers.sundialssolvers => resSun,
                             Solvers.DASSLsolvers => resDASSL)
 
-    reltols = abstols
+    testreltols = testabstols
 
     #loop over each solver pack (e.g. ODE, Sundials)
     for (solverpack,respack) in resbysolverpack
         ##loop over each test case designated for suite
         for (n,tc) in testcases
             res = Dict{Solver,Any}()
+            tstepss = [linspace(tc.tspan[1], tc.tspan[2], n) for n in testntsteps]
             #loop over each solver designated for suites,
             #and select the ones in the current solver package
             for solverfn in testsolvers
+                if solverfn == Solvers.Sundials.idasol || solverfn==Solvers.Sundials.cvode
+                    continue
+                end
                 if haskey(solverpack, solverfn)
                     solver = solverpack[solverfn]
                     # run test suite for adaptive or fixed step solver
+
                     if isapplicable(solver, tc) && isadaptive(solver)
-                        suite = TestSuite(tc, solver, abstols, reltols, [NaN])
+                        suite = TestSuite(tc, solver, testabstols, testreltols, [NaN])
                         res[solver] = run_ode_testsuite(suite)
                     elseif isapplicable(solver, tc) && !isadaptive(solver)
                         if name(tc)==:bruss1d
                             # 10^5 steps take more than 10 min to run, skip:
-                            suite = TestSuite(tc, solver, tstepss[ntsteps.<50_000])
+                            suite = TestSuite(tc, solver, tstepss[testntsteps.<50_000])
+                        elseif name(tc) == :plei
+                          suite = TestSuite(tc, solver, tstepss[testntsteps.<10_000])
                         else
 
                             suite = TestSuite(tc, solver, tstepss)
@@ -94,7 +101,7 @@ function runsuites(;testsolvers = [all],
 end
 
 
-runsuites(solvers,cases,abstols,ntsteps) = runsuites(testsolvers = solvers,
+runsuite(solvers,cases,abstols,ntsteps) = runsuite(testsolvers = solvers,
                                                     testcases = cases,
                                                     testabstol = abstols,
                                                     testntsteps = ntsteps)
@@ -124,6 +131,6 @@ include("plot_suites.jl")
 
 
 # functions for configuring and running benchmarks
-export runsuites, selectcases
+export runsuite, selectcases
 # functions for plotting benchmarks
-export plotsuites, plotfixedsuites, plotadaptivesuites
+export plotsuite, plotfixedsuite, plotadaptivesuite

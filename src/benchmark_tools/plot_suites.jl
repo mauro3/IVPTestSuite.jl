@@ -5,9 +5,9 @@ import PyPlot
 const Py = PyPlot
 totest = IVPTestSuite.tc_all
 
-function plotsuites(results)
-    plotadaptivesuites(results)
-    plotfixedsuites(results)
+function plotsuite(results)
+    plotadaptivesuite(results)
+    plotfixedsuite(results)
 end
 
 #TODO: Use ColorMaps to get arbritary number of well spaced colors
@@ -24,7 +24,7 @@ end
 
 # plots the suites ran with runsuites.jl and saves plots to output/
 
-function plotadaptivesuites(results)
+function plotadaptivesuite(results)
     testcases = results[1]
     (resODE, resODEfixed, resSun, resDASSL) = results[2]
     ## Adaptive steppers
@@ -39,13 +39,15 @@ function plotadaptivesuites(results)
 
         # DASSL.jl
         if haskey(resDASSL,n)
-            res = resDASSL[n]
-            scd = getfield_vec(res, :scd)
-            maxscd = max(maxscd, maximum(scd))
-            wt = getfield_vec(res, :walltime)
-            p2 = Py.semilogy(scd, wt, "-x"*cols[colind])
-            make_legend!(leg, res)
-            colind +=1
+            rdassl = resDASSL[n]
+            for (s,res) in rdassl
+                scd = getfield_vec(res, :scd)
+                maxscd = max(maxscd, maximum(scd))
+                wt = getfield_vec(res, :walltime)
+                p2 = Py.semilogy(scd, wt, "-x"*cols[colind])
+                make_legend!(leg, res)
+                colind +=1
+            end
         end
 
         # ODE.jl
@@ -95,7 +97,7 @@ function plotadaptivesuites(results)
 
 end
 
-function plotfixedsuites(results)
+function plotfixedsuite(results)
     testcases = results[1]
     (resODE, resODEfixed, resSun, resDASSL) = results[2]
     ## Fixed step solvers
