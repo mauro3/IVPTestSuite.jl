@@ -262,6 +262,9 @@ include("eval_tests.jl")
 ## The test cases
 include("testcases/testcases.jl")
 
+## The test cases
+include("benchmark_tools/runsuites.jl")
+
 ## Plotting
 @require PyPlot include(Pkg.dir()*"/IVPTestSuite/src/plotting.jl") # bug requires full path: https://github.com/one-more-minute/Requires.jl/issues/2
 
