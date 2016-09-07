@@ -27,6 +27,8 @@ A Test Suite Module
 "
 module Benchmarker
     using IVPTestSuite
+    using Sundials
+    using DASSL
 
     function selectcases(casestuple::Symbol...=:all)
         if casestuple[1] == :all

@@ -86,7 +86,7 @@ function plotadaptivesuites()
             Py.title("$n")
             Py.xlabel("significant digits")
             Py.ylabel("Walltime (s)")
-            Py.display(id)
+            #Py.display(id)
             Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/adaptive-scd-vs-walltime-$n.png")
             #Py.close(id)
         end
@@ -128,7 +128,6 @@ function plotfixedsuites()
                         fst = false
                     else
                         p2 = Py.semilogy(scd, wt, "-o"*cols[colind],hold = true)
-
                     end
                     make_legend!(leg, res)
                     colind +=1
@@ -138,7 +137,7 @@ function plotfixedsuites()
             Py.title("$n (fixed step)")
             Py.xlabel("significant digits")
             Py.ylabel("Walltime (s)")
-            Py.display(id2)
+            #Py.display(id2)
             Py.savefig(Pkg.dir()*"/IVPTestSuite/testsuites/output/fixedstep-scd-vs-walltime-$n.png")
             #Py.close(id2)
         end
