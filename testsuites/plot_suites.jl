@@ -73,7 +73,7 @@ function plotadaptivesuites()
                 end
                 maxscd = max(maxscd, maximum(scd))
                 wt = getfield_vec(res, :walltime)
-                @show cols[rem1(colind,nc)]
+                cols[rem1(colind,nc)]
                 p = Py.semilogy(scd, wt, "-d"*cols[rem1(colind,nc)])
                 make_legend!(leg, res)
                 colind +=1
