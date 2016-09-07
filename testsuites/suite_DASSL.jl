@@ -1,6 +1,5 @@
-resDASSL = Dict{Symbol,Any}()
-
 function DASSLsuites(totest,testsolvers,abstols)
+  resDASSL = Dict{Symbol,Any}()
   reltols = abstols
 
   for (n,tc) in totest
@@ -12,5 +11,5 @@ function DASSLsuites(totest,testsolvers,abstols)
           end
       end
   end
-
+  return resDASSL
 end

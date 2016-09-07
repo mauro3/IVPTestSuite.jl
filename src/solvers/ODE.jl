@@ -88,28 +88,35 @@ pkg = "ODE.jl"
 #    ode23s = Solver{:im}(ODE.ode23s, stiff)
 
 ODEsolvers = Dict{Any,Solver}()
+ODEadaptivesolvers = Dict{Any,Solver}()
+ODEfixedsolvers = Dict{Any,Solver}()
+
 sl = 1 # to make it global so it works with eval
 # adaptive non-stiff solvers
 for fn in nonstiff_adaptive
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
+    ODEadaptivesolvers[fn] = sl
 end
 
 # fixed step non-stiff solvers
 for fn in nonstiff_fixedstep
     sl = Solver{:ex}(fn, ODE, ODEjl_wrapper, nonstiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
+    ODEfixedsolvers[fn] =sl
 end
 
 # adaptive stiff solvers
 for fn in stiff_adaptive
     sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, adaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
+    ODEadaptivesolvers[fn] = sl
 end
 
 # fixed step stiff solvers
 for fn in stiff_fixedstep
     sl = Solver{:im}(fn, ODE, ODEjl_wrapper, stiff, nonadaptive, ode_only, explicit_eq)
     ODEsolvers[fn] = sl
+    ODEfixedsolvers[fn] =sl
 end
 merge!(allsolvers, ODEsolvers)

@@ -1,6 +1,5 @@
-resODEfixed = Dict{Symbol,Dict}()
-
 function ODEfixedsuites(totest,testsolvers,ntsteps)
+  resODEfixed = Dict{Symbol,Dict}()
   for (n,tc) in totest
       res = Dict{Solver,Any}()
       tstepss = [linspace(tc.tspan[1], tc.tspan[2], n) for n in ntsteps]
@@ -21,4 +20,5 @@ function ODEfixedsuites(totest,testsolvers,ntsteps)
       end
       resODEfixed[n] = res
   end
+  return resODEfixed
 end

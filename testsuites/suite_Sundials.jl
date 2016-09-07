@@ -1,9 +1,9 @@
-resSun = Dict{Symbol,Dict}()
 
 # this eats memory
 function sundialsuites(totest,testsolvers,abstols)
   reltols = abstols
-
+  resSun = Dict{Symbol,Dict}()
+  
   for (n,tc) in totest
       res = Dict{Solver,Any}()
       for solverfn in testsolvers
@@ -20,4 +20,5 @@ function sundialsuites(totest,testsolvers,abstols)
       end
       resSun[n] = res
   end
+  return resSun
 end

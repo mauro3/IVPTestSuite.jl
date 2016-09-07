@@ -1,6 +1,6 @@
-resODE = Dict{Symbol,Dict}()
 
 function ODEsuites(totest,testsolvers,abstols)
+  resODE = Dict{Symbol,Dict}()
   reltols = abstols
   for (n,tc) in totest
       res = Dict{Solver,Any}()
@@ -15,5 +15,5 @@ function ODEsuites(totest,testsolvers,abstols)
       end
       resODE[n] = res
   end
-
+return resODE
 end
