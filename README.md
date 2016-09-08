@@ -141,9 +141,9 @@ Note that errors are caught, ignored and the next test is run.
 
 Benchmark tools have been provided for users who would like to run quick
 test suites of certain solvers against certain test cases. This is done using
-the `runsuites()` function.
+the `runsuite()` function.
 
-`runsuites()` returns the results of the a configured testsuite, configured with the following keyword arguments
+`runsuite()` returns the results of the a configured testsuite, configured with the following keyword arguments
 - `testsolvers`: selects which solvers to test. Defaulted to `[all]`
 - `testcases`: selects which test problem to run. Defaulted to `[:all]`
 - `testabstols`: Range of `abstols` to run adaptive solvers with. Defaulted to `10.0.^(-5:-1:-11)`
@@ -159,28 +159,28 @@ solvers = [ODE.ode45]
 cases = [:plei]
 ntsteps = vcat(collect(10.^(1:3)))
 abstol = 10.0.^(-5:-1:-8)
-results = runsuites(testsolvers = solvers,testcases = cases,testabstol=abstol,testntstepts = ntsteps);
+results = runsuite(testsolvers = solvers,testcases = cases,testabstol=abstol,testntstepts = ntsteps);
 ```
 Example 2:
 ```
 solvers = [all]
 cases = [:all]
 abstol = 10.0.^(-5:-1:-10)
-results = runsuites(testsolvers = [solvers],testcases = cases,testabstol=abstol);
+results = runsuite(testsolvers = [solvers],testcases = cases,testabstol=abstol);
 ```
 Example 3:
 ```
 solvers = [Sundials.idasol, DASSL.dasslSolve, ODE.ode23s]
-results = runsuites(testsolvers = [solvers], progressmeter = true);
+results = runsuite(testsolvers = [solvers], progressmeter = true);
 ```
 Example 4:
 ```
-results = runsuites(testcases = [:plei], verbose = true);
+results = runsuite(testcases = [:plei], verbose = true);
 ```
 
 The results of these suite cane be easily plotted by calling
 ```
-plotsuites(results)
+plotsuite(results)
 ```
 
 ### Implementing new test-cases
