@@ -152,6 +152,7 @@ the `runsuites()` function.
 - `progressmeter`: uses ProgressMeter.jl to display progress of a suite of a given solver on a given test case. Defaulted to `false`
 
 We list a few example runs:
+
 Example 1:
 ```
 solvers = [ODE.ode45]
