@@ -59,7 +59,7 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
     if progressmeter
       print_with_color(:green, "$Name with $(suite.solver.solverfn)\n")
       n = length(enumerate(suite))
-      p = Progress(n,"Running:")
+      p = Progress(n,"")
       verbose = false
     end
 

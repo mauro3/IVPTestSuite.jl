@@ -33,7 +33,7 @@ function runsuite(;testsolvers::Array{Function,1} = [all],
                                 testabstols = 10.0.^(-5:-1:-10),
                                 testntsteps = vcat(collect(10.^(1:5)), 500_000),
                                 verbose = false,
-                                progressmeter = true)
+                                progressmeter = false)
 
     # test all solvers is option is chosen
     if testsolvers == [all]
