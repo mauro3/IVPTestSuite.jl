@@ -4,7 +4,7 @@ These results show some of the solvers in plots of significant digits
 vs wall-time, similar to the plots of the
 [Bari-IVP testset](http://www.dm.uniba.it/~testset/testsetivpsolvers/).
 These tests can be run with the scrips
-[runsuites.jl](testsuites/runsuites.jl) which will store the plots in
+[sample_runsuite_script.jl](testsuites/sample_runsuite_script.jl) which will store the plots in
 `testsuites/output`.  Below tests were run on a Intel i7-3520M CPU @
 2.90GHz.
 

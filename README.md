@@ -45,7 +45,7 @@ Adding support for other solvers is straightforward, see instructions below.
 ## Results
 
 [Results](results/results.md) for all test cases and solvers are
-available and can be run with [runsuites.jl](testsuites/runsuites.jl).
+available and can be run with [sample_runsuite_script.jl](testsuites/sample_runsuite_script.jl).
 
 ## Manual
 
@@ -137,61 +137,48 @@ Running test 6 of 6: sig. digits= 6.075275133643523, walltime= 0.016467959s, mem
 
 Note that errors are caught, ignored and the next test is run.
 
-### Running suites using Benchmarker module
+### Running suites using bencmark tools
 
-The Benchmarker module was intended to for users who would like to run quick
-test suites of certain solvers against certain test cases.
+Benchmark tools have been provided for users who would like to run quick
+test suites of certain solvers against certain test cases. This is done using
+the `runsuites()` function.
 
-First, one must load the module
+`runsuites()` returns the results of the a configured testsuite, configured with the following keyword arguments
+- `testsolvers`: selects which solvers to test. Defaulted to `[all]`
+- `testcases`: selects which test problem to run. Defaulted to `[:all]`
+- `testabstols`: Range of `abstols` to run adaptive solvers with. Defaulted to `10.0.^(-5:-1:-11)`
+- `testntsteps`: Range of `ntsteps` to run adaptive solvers with. Defaulted to `ntsteps = vcat(collect(10.^(1:5)), 500_000)`
+- `verbose`: prints out detailed information about accuracy (in scd), walltime and memory usage at each `abstol` or `ntsteps` value for a suite of a given solver on a given test case. Defaulted to `false`
+- `progressmeter`: uses ProgressMeter.jl to display progress of a suite of a given solver on a given test case. Defaulted to `false`
 
-```
-include(joinpath(Pkg.dir(),"IVPTestSuite\\testsuites\\runsuites.jl"))
-using Benchmarker
-```
-
-Next, there are two ways of running the suites.
-
-First, is to configure the testsuite with variable which will enable you to quickly
-edit the suite and rerun with different figures. Four variables are necessary to
-run a test: one which holds the solvers to test, on which holds the cases to test,
-one which holds the tolerances to test, and one which holds the number of time steps
-to test with. To select the solvers, simply store the list of solvers in a array,
-like any of the following examples:
+We list a few example runs:
 ```
 solvers = [ODE.ode45]
-solvers = [ODE.ode78, Sundials.cvode]
-solvers = allsolvers
+cases = [:plei]
+ntsteps = vcat(collect(10.^(1:3)))
+abstol = 10.0.^(-5:-1:-8)
+results = runsuites(testsolvers = solvers,testcases = cases,testabstol=abstol,testntstepts = ntsteps);
 ```
-To select the test cases, use the the `selectcases()` functions as follows:
 
 ```
-cases = selectcases(:all)
-cases = selectcases(:plei)
-cases = selectcases(:hires,:vdpol)
+solvers = [all]
+cases = [:all]
+abstol = 10.0.^(-5:-1:-10)
+results = runsuites(testsolvers = [solvers],testcases = cases,testabstol=abstol);
 ```
-As for the tolerance and time step ranges, simply set these values to desired quantities:
 
 ```
-ntsteps = vcat(collect(10.^(1:5)), 500_000)
-abstol = 10.0.^(-5:-1:-11)
+solvers = [Sundials.idasol, DASSL.dasslSolve, ODE.ode23s]
+results = runsuites(testsolvers = [solvers], progressmeter = true);
 ```
-Now it is time to run this configured suite:
 
 ```
-runsuites(solvers,cases,abstol,ntsteps)
+results = runsuites(testcases = [:plei], verbose = true);
 ```
-The results can be easily plotted by calling
+
+The results of these suite cane be easily plotted by calling
 ```
-plotsuites()
-```
-The second way to use Benchmarker is to also call `Benchmarker.runsuites()` function,
-but a version which instead takes as optional keyword arguments `testsolvers`,
- `testcases`, `testabstol`, `testntsteps`. This way is thus quicker than the first.
-If these are not set, they will default to testing all solvers, all cases,
-and respectively. A example call looks like the following:
-```
-runsuites(testsolvers=[ODE.ode78,Sundials.IDASolve], testcases=selectcases(:plei,:hires))
-plotsuites()
+plotsuites(results)
 ```
 
 ### Implementing new test-cases
