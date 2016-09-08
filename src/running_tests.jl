@@ -67,7 +67,6 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
 
         if verbose
             print("Running test $i of $tot:")
-            progressmeter = false
         end
 
         push!(out, run_fn(tr; verbose=verbose))
@@ -85,6 +84,9 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
         if progressmeter
             ProgressMeter.next!(p)
         end
+    end
+    if progressmeter
+        ProgressMeter.move_cursor_up_while_clearing_lines(STDOUT, 2)
     end
     out
 end
