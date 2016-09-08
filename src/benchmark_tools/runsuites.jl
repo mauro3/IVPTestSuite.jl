@@ -32,7 +32,8 @@ function runsuite(;testsolvers::Array{Function,1} = [all],
                                 testcases = :all,
                                 testabstols = 10.0.^(-5:-1:-10),
                                 testntsteps = vcat(collect(10.^(1:5)), 500_000),
-                                verbose = false)
+                                verbose = false,
+                                progressmeter = true)
 
     # test all solvers is option is chosen
     if testsolvers == [all]
@@ -75,7 +76,7 @@ function runsuite(;testsolvers::Array{Function,1} = [all],
 
                     if isapplicable(solver, tc) && isadaptive(solver)
                         suite = TestSuite(tc, solver, testabstols, testreltols, [NaN])
-                        res[solver] = run_ode_testsuite(suite,verbose = verbose)
+                        res[solver] = run_ode_testsuite(suite,verbose = verbose, progressmeter = progressmeter)
                     elseif isapplicable(solver, tc) && !isadaptive(solver)
                         if name(tc)==:bruss1d
                             # 10^5 steps take more than 10 min to run, skip:
@@ -85,7 +86,7 @@ function runsuite(;testsolvers::Array{Function,1} = [all],
                         else
                             suite = TestSuite(tc, solver, tstepss)
                         end
-                        res[solver] = run_ode_testsuite(suite,  verbose = verbose)
+                        res[solver] = run_ode_testsuite(suite,  verbose = verbose, progressmeter = progressmeter)
                     end
                 end
             end
