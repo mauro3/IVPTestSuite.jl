@@ -152,6 +152,7 @@ the `runsuites()` function.
 - `progressmeter`: uses ProgressMeter.jl to display progress of a suite of a given solver on a given test case. Defaulted to `false`
 
 We list a few example runs:
+Example 1:
 ```
 solvers = [ODE.ode45]
 cases = [:plei]
@@ -159,19 +160,19 @@ ntsteps = vcat(collect(10.^(1:3)))
 abstol = 10.0.^(-5:-1:-8)
 results = runsuites(testsolvers = solvers,testcases = cases,testabstol=abstol,testntstepts = ntsteps);
 ```
-
+Example 2:
 ```
 solvers = [all]
 cases = [:all]
 abstol = 10.0.^(-5:-1:-10)
 results = runsuites(testsolvers = [solvers],testcases = cases,testabstol=abstol);
 ```
-
+Example 3:
 ```
 solvers = [Sundials.idasol, DASSL.dasslSolve, ODE.ode23s]
 results = runsuites(testsolvers = [solvers], progressmeter = true);
 ```
-
+Example 4:
 ```
 results = runsuites(testcases = [:plei], verbose = true);
 ```
