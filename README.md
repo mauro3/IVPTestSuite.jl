@@ -49,7 +49,53 @@ available and can be run with [sample_runsuite_script.jl](testsuites/sample_runs
 
 ## Manual
 
-### Running implemented test-cases with supported solvers
+### Running suites using bencmark tools
+
+Benchmark tools have been provided for users who would like to run quick
+test suites of certain solvers against certain test cases. This is done using
+the `runsuite()` function.
+
+`runsuite()` returns the results of the a configured testsuite, configured with the following keyword arguments
+- `testsolvers`: selects which solvers to test. Defaulted to `allsolverfns`
+- `testcases`: selects which test problem to run. Defaulted to `[:all]`
+- `testabstols`: Range of `abstols` to run adaptive solvers with. Defaulted to `10.0.^(-5:-1:-11)`
+- `testntsteps`: Range of `ntsteps` to run adaptive solvers with. Defaulted to `ntsteps = vcat(collect(10.^(1:5)), 500_000)`
+- `verbose`: prints out detailed information about accuracy (in scd), walltime and memory usage at each `abstol` or `ntsteps` value for a suite of a given solver on a given test case. Defaulted to `false`
+- `progressmeter`: uses ProgressMeter.jl to display progress of a suite of a given solver on a given test case. Defaulted to `false`
+
+We list a few example runs:
+
+Example 1:
+```
+solvers = [ODE.ode45]
+cases = [:plei]
+ntsteps = vcat(collect(10.^(1:3)))
+abstol = 10.0.^(-5:-1:-8)
+results = runsuite(testsolvers = solvers, testcases = cases, testabstols = abstol, testntstepts = ntsteps);
+```
+Example 2:
+```
+solvers = allsolverfns
+cases = [:all]
+abstol = 10.0.^(-5:-1:-10)
+results = runsuite(testsolvers = solvers, testcases = cases, testabstols = abstol);
+```
+Example 3:
+```
+solvers = [Sundials.idasol, DASSL.dasslSolve, ODE.ode23s]
+results = runsuite(testsolvers = solvers, progressmeter = true);
+```
+Example 4:
+```
+results = runsuite(testcases = [:plei], verbose = true);
+```
+
+The results of these suite cane be easily plotted by calling
+```
+plotsuite(results)
+```
+
+### Running implemented test-cases with supported solvers via the lower interface
 
 [ex1.jl](examples/ex1.jl) shows how to run a single TestCase with a particular solver:
 ```julia
@@ -136,52 +182,6 @@ Running test 6 of 6: sig. digits= 6.075275133643523, walltime= 0.016467959s, mem
 ```
 
 Note that errors are caught, ignored and the next test is run.
-
-### Running suites using bencmark tools
-
-Benchmark tools have been provided for users who would like to run quick
-test suites of certain solvers against certain test cases. This is done using
-the `runsuite()` function.
-
-`runsuite()` returns the results of the a configured testsuite, configured with the following keyword arguments
-- `testsolvers`: selects which solvers to test. Defaulted to `[all]`
-- `testcases`: selects which test problem to run. Defaulted to `[:all]`
-- `testabstols`: Range of `abstols` to run adaptive solvers with. Defaulted to `10.0.^(-5:-1:-11)`
-- `testntsteps`: Range of `ntsteps` to run adaptive solvers with. Defaulted to `ntsteps = vcat(collect(10.^(1:5)), 500_000)`
-- `verbose`: prints out detailed information about accuracy (in scd), walltime and memory usage at each `abstol` or `ntsteps` value for a suite of a given solver on a given test case. Defaulted to `false`
-- `progressmeter`: uses ProgressMeter.jl to display progress of a suite of a given solver on a given test case. Defaulted to `false`
-
-We list a few example runs:
-
-Example 1:
-```
-solvers = [ODE.ode45]
-cases = [:plei]
-ntsteps = vcat(collect(10.^(1:3)))
-abstol = 10.0.^(-5:-1:-8)
-results = runsuite(testsolvers = solvers,testcases = cases,testabstol=abstol,testntstepts = ntsteps);
-```
-Example 2:
-```
-solvers = [all]
-cases = [:all]
-abstol = 10.0.^(-5:-1:-10)
-results = runsuite(testsolvers = [solvers],testcases = cases,testabstol=abstol);
-```
-Example 3:
-```
-solvers = [Sundials.idasol, DASSL.dasslSolve, ODE.ode23s]
-results = runsuite(testsolvers = [solvers], progressmeter = true);
-```
-Example 4:
-```
-results = runsuite(testcases = [:plei], verbose = true);
-```
-
-The results of these suite cane be easily plotted by calling
-```
-plotsuite(results)
-```
 
 ### Implementing new test-cases
 

@@ -22,23 +22,21 @@
 #      Ex: `plotsuite()`
 ###############################################################################
 
+# variable of all solvers
+allsolverfns = collect(keys(Solvers.allsolvers))
+
 # functions for running a configured test suite
 "
 runsuite(;testsolvers,testcases,testabstol,testntsteps)
 
 function for easily running test suite scripts
 "
-function runsuite(;testsolvers::Array{Function,1} = [all],
+function runsuite(;testsolvers::Array{Function,1} = allsolverfns,
                                 testcases = :all,
                                 testabstols = 10.0.^(-5:-1:-10),
                                 testntsteps = vcat(collect(10.^(1:5)), 500_000),
                                 verbose = false,
                                 progressmeter = true)
-
-    # test all solvers is option is chosen
-    if testsolvers == [all]
-      testsolvers = collect(keys(Solvers.allsolvers))
-    end
 
     # select the designated test problems
     testcases = selectcases(testcases)
@@ -133,5 +131,6 @@ include("plot_suites.jl")
 
 # functions for configuring and running benchmarks
 export runsuite, selectcases
+export allsolverfns
 # functions for plotting benchmarks
 export plotsuite, plotfixedsuite, plotadaptivesuite

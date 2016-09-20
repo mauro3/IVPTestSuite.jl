@@ -8,12 +8,11 @@
 
 
 export plei
-
+T = Float64 # the datatype used, probably Float64
 # create an instance of TestCaseExplicit by filling in the ...:
 plei = let
     tcname = :plei ::Symbol # name should be same as variable name (except for upper/lower case)
 
-    T = Float64 # the datatype used, probably Float64
     Tarr = [Matrix, SparseMatrixCSC][2] # the container datatype used
                                         # for the Jacobian and mass
                                         # matrix, probably Matrix
