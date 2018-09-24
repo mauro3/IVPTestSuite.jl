@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/mauro3/IVPTestSuite.jl.svg?branch=master)](https://travis-ci.org/mauro3/IVPTestSuite.jl)
 
+**This package is superseded by the DifferentialEquations.jl offerings and thus abandoned.**
+
 This package implements a bunch of initial value problems (IPV) to
 test solvers of ordinary differential equations (ODE) and algebraic
 differential equations (DAE).  The idea is to test different solvers
