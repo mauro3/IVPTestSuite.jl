@@ -1,5 +1,7 @@
 export run_ode_test, run_ode_testsuite
 
+using ProgressMeter
+
 @doc "Runs one ODE TestRun" ->
 function run_ode_test{Name}(tr::TestRun{Name}; verbose=true)
     if !isapplicable(tr.tc, tr.solver)
@@ -27,14 +29,17 @@ function run_ode_test_throwerror{Name}(tr::TestRun{Name})
         return nothing
     end
     gc()
+
+    #TODO: Add a time out option
     out, walltime, mem, gc_time = @timed tr.solver.wrapper(tr)
+
     tend, yend, stats = out
     return simple_eval(tend, yend, stats, walltime, mem, gc_time, tr)
 end
 
 
 @doc "Runs a suite of ODE TestRun's" ->
-function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=true, throwerror=false)
+function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=true, throwerror=false, progressmeter = false)
     run_fn = throwerror ? run_ode_test_throwerror : run_ode_test
     if !isapplicable(suite.tc, suite.solver)
         println("\nTest case $Name not compatible with solver $(suite.solver.solverfn)")
@@ -50,10 +55,20 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
 
     out = TestResults[]
     tot = length(suite)
+
+    if progressmeter
+      print_with_color(:green, "$Name with $(suite.solver.solverfn)\n")
+      n = length(enumerate(suite))
+      p = Progress(n,"")
+      verbose = false
+    end
+
     for (i,tr) in enumerate(suite)
+
         if verbose
             print("Running test $i of $tot:")
         end
+
         push!(out, run_fn(tr; verbose=verbose))
         if verbose
             sd = out[end].scd
@@ -66,6 +81,12 @@ function run_ode_testsuite{Name}(suite::TestSuite{Name}; verbose=true, warmup=tr
                 println(" sig. digits= $sd, walltime= $(wt)s, memory= $(mem)MB")
             end
         end
+        if progressmeter
+            ProgressMeter.next!(p)
+        end
+    end
+    if progressmeter
+        ProgressMeter.move_cursor_up_while_clearing_lines(STDOUT, 2)
     end
     out
 end

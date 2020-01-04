@@ -47,11 +47,57 @@ Adding support for other solvers is straightforward, see instructions below.
 ## Results
 
 [Results](results/results.md) for all test cases and solvers are
-available and can be run with [runsuites.jl](testsuites/runsuites.jl).
+available and can be run with [sample_runsuite_script.jl](testsuites/sample_runsuite_script.jl).
 
 ## Manual
 
-### Running implemented test-cases with supported solvers
+### Running suites using bencmark tools
+
+Benchmark tools have been provided for users who would like to run quick
+test suites of certain solvers against certain test cases. This is done using
+the `runsuite()` function.
+
+`runsuite()` returns the results of the a configured testsuite, configured with the following keyword arguments
+- `testsolvers`: selects which solvers to test. Defaulted to `allsolverfns`
+- `testcases`: selects which test problem to run. Defaulted to `[:all]`
+- `testabstols`: Range of `abstols` to run adaptive solvers with. Defaulted to `10.0.^(-5:-1:-11)`
+- `testntsteps`: Range of `ntsteps` to run adaptive solvers with. Defaulted to `ntsteps = vcat(collect(10.^(1:5)), 500_000)`
+- `verbose`: prints out detailed information about accuracy (in scd), walltime and memory usage at each `abstol` or `ntsteps` value for a suite of a given solver on a given test case. Defaulted to `false`
+- `progressmeter`: uses ProgressMeter.jl to display progress of a suite of a given solver on a given test case. Defaulted to `false`
+
+We list a few example runs:
+
+Example 1:
+```
+solvers = [ODE.ode45]
+cases = [:plei]
+ntsteps = vcat(collect(10.^(1:3)))
+abstol = 10.0.^(-5:-1:-8)
+results = runsuite(testsolvers = solvers, testcases = cases, testabstols = abstol, testntstepts = ntsteps);
+```
+Example 2:
+```
+solvers = allsolverfns
+cases = [:all]
+abstol = 10.0.^(-5:-1:-10)
+results = runsuite(testsolvers = solvers, testcases = cases, testabstols = abstol);
+```
+Example 3:
+```
+solvers = [Sundials.idasol, DASSL.dasslSolve, ODE.ode23s]
+results = runsuite(testsolvers = solvers, progressmeter = true);
+```
+Example 4:
+```
+results = runsuite(testcases = [:plei], verbose = true);
+```
+
+The results of these suite cane be easily plotted by calling
+```
+plotsuite(results)
+```
+
+### Running implemented test-cases with supported solvers via the lower interface
 
 [ex1.jl](examples/ex1.jl) shows how to run a single TestCase with a particular solver:
 ```julia
@@ -151,7 +197,7 @@ and the already implemented test cases in
 # create an instance of TestCaseExplicit:
 mytest = let
     tcname = ...::Symbol # name should be same as variable name (except for upper/lower case)
-    
+
     T = ... # the datatype used, probably Float64
     Tarr = [Matrix, SparseMatrixCSC][1] # the container datatype used
                                         # for the Jacobian and mass
@@ -172,7 +218,7 @@ mytest = let
     end
     # initializes storage for y:
     fn!( ; T_::Type=T, dof_=dof) = zeros(T_,dof_)
- 
+
     # NOTE, using keyword arguments more intuitively like:
     # fn!( ; T::Type=T, dof=dof) = zeros(T,dof)
     # does not work: https://github.com/JuliaLang/julia/issues/9948
@@ -204,7 +250,7 @@ mytest = let
     # Returns a matrix which can hold the mass matrix.
     # Can also be used to make a Matlab-style MvPattern matrix with mass!(Bool)
     mass!( ; T_::Type=T, dof_=dof) = zeros(T_,dof_,dof_)  # if the problem is large better return an appropriate sparse matrix
-    
+
     ic = T[...] # vector of initial conditions
     tspan = T[start, stop] # integration interval
     refsol = T[...] # reference solution at tspan[2]
@@ -212,11 +258,11 @@ mytest = let
     refsolinds = trues(dof)   # if refsol does not contain all indices
                               # then specify which indices of the
                               # solution are to be compared to refsol
-    
+
     scd_absinds = Int[]       # set where refsol is very small or
                               # zero. To avoid it dominating the
                               # relative error
-    
+
     tc = TestCaseExplicit{tcname, T, Tarr}(
                              stiffness,
                              dae,
@@ -256,19 +302,19 @@ function wrapped_solver(tr::TestRun)
     so = tr.solver
     ###
     # 0) Wrap tc.fn!, tc.jac!, tc.mass! if necessary
-    
+
     ###
     # 1) Make call signature
 
     args = ...
     kwargs = ...
-    
+
     ###
     # 2) Call solver, if it does not succeed throw an error (if that
     # is not done anyway)
     out = so.solverfn(args...; kwargs...)  
     # (probably no need to modify this section)
-    
+
     ###
     # 3) Transform output to conform to standard:
     # tend -- end time reached
@@ -278,9 +324,9 @@ function wrapped_solver(tr::TestRun)
     ...
     return tend, yend, stats
 end
-    
+
 solverfn = ...::Function # the actual solver function, for example ODE.ode23s.
-# choose from 
+# choose from
 typ =  [:ex, :im, :imex][2]                    # Typ: :ex (explicit method), :im (implicit method), :imex (IMEX method)
 stiffness = [nonstiff, mildlystiff, stiff][1]  # stiff, mildly stiff or non-stiff solver
 adaptive = [true, false][1]                    # is the solver adaptive
@@ -305,4 +351,3 @@ were copied from
 [OdePkg](http://octave.sourceforge.net/odepkg/overview.html).  If
 someone would prefer a MIT/BSD licence, just re-implement the OdePkg
 derived files and I will update the licence.
- 
